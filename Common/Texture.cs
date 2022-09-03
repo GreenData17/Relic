@@ -73,6 +73,45 @@ namespace Relic.Common
             return new Texture(handle);
         }
 
+        public static Texture LoadfromBitmap(Bitmap bitmap)
+        {
+            // Generate handle
+            int handle = GL.GenTexture();
+
+            // Bind the handle
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, handle);
+
+            bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            Image img = bitmap;
+            byte[,,] data = new byte[bitmap.Height, bitmap.Width, 4];
+
+            for (int y = 0; y < bitmap.Height; y++)
+            {
+                for (int x = 0; x < bitmap.Width; x++)
+                {
+                    data[y, x, 0] = bitmap.GetPixel(x,y).R;
+                    data[y, x, 1] = bitmap.GetPixel(x,y).G;
+                    data[y, x, 2] = bitmap.GetPixel(x,y).B;
+                    data[y, x, 3] = bitmap.GetPixel(x,y).A;
+                }
+            }
+
+
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, data);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+
+            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+
+            return new Texture(handle);
+        }
+
         public Texture(int glHandle)
         {
             Handle = glHandle;
