@@ -9,9 +9,25 @@ namespace Relic.Objects
 {
     public class Sprite
     {
+        public bool enabled { get; private set; }
+
+        public string name;
+        public uint order = 0;
         public Vector2 position;
+        public Vector2 size;
+        public float rotation = 0f;
+        public float scale = 1f;
 
         private float baseScale = 100f;
+
+        public Texture texture = null;
+        public Texture texture2 = null;
+
+        private bool finishedInit;
+
+
+
+        #region shader Variables
 
         private readonly float[] m_vertices =
         { //  Position             Texture coordinates
@@ -34,12 +50,81 @@ namespace Relic.Objects
 
         private int m_elementBufferObject;
 
-        public Texture texture;
-        public Texture texture2;
+        #endregion
 
-        public Sprite()
+
+        public Sprite(string name)
         {
+            this.name = name;
+            setup();
+        }
+
+        public Sprite(string name, Texture texture)
+        {
+            this.name = name;
+            this.texture = texture;
+            setup();
+        }
+
+        private void setup()
+        {
+            // Debug.LogEngine($"[sprite] \"{name}\" created!");
+
             position = new Vector2();
+            size = new Vector2(1);
+
+            Load();
+
+            Window.sprites.Add(this);
+            enabled = true;
+            finishedInit = true;
+        }
+
+        public void Update()
+        {
+            if (!finishedInit) return;
+
+            texture.Use(TextureUnit.Texture0);
+
+            if (texture2 != null)
+                texture2.Use(TextureUnit.Texture1);
+
+
+            m_shader.Use();
+
+            var tempscale = (baseScale * scale) ; // + Window.mainCam.zoom * 10;
+
+            var model = Matrix4.Identity;
+            model = model * Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(rotation));
+            model = model * Matrix4.CreateScale(size.X * tempscale, size.Y * tempscale, model.ExtractScale().Z);
+            model = model * Matrix4.CreateTranslation(position.X, position.Y, 0);
+
+
+            // IMPORTANT: OpenTK's matrix types are transposed from what OpenGL would expect - rows and columns are reversed.
+            // They are then transposed properly when passed to the shader. 
+            // This means that we retain the same multiplication order in both OpenTK c# code and GLSL shader code.
+            // If you pass the individual matrices to the shader and multiply there, you have to do in the order "model * view * projection".
+            // You can think like this: first apply the modelToWorld (aka model) matrix, then apply the worldToView (aka view) matrix, 
+            // and finally apply the viewToProjectedSpace (aka projection) matrix.
+            m_shader.SetMatrix4("model", model);
+            m_shader.SetMatrix4("view", Window.mainCam.view);
+            m_shader.SetMatrix4("projection", Window.m_projection);
+
+            GL.DrawElements(PrimitiveType.Triangles, m_indices.Length, DrawElementsType.UnsignedInt, 0);
+        }
+
+        public void SetActive(bool state)
+        {
+            if (enabled && state) return;
+            else if (!enabled && !state) return;
+            else if (enabled && !state) Unload();
+            else if (!enabled && state) Load();
+        }
+
+        public void Load()
+        {
+            if (enabled) return;
+            enabled = true;
 
             m_vertexArrayObject = GL.GenVertexArray();
             GL.BindVertexArray(m_vertexArrayObject);
@@ -66,51 +151,37 @@ namespace Relic.Objects
             GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
 
 
-            if(texture == null)
+            if (texture == null)
                 texture = Texture.LoadFromFile("Resources/NoTexture.png");
 
             texture.Use(TextureUnit.Texture0);
 
 
-            if (texture2 == null)
-                texture2 = new Texture(1);
+            if (texture2 != null)
+                texture2.Use(TextureUnit.Texture1);
 
-            texture2.Use(TextureUnit.Texture1);
 
             m_shader.SetInt("texture0", 0);
-            m_shader.SetInt("texture1", 1);
+
+
+            if (texture2 != null)
+                m_shader.SetInt("texture1", 1);
         }
-
-        public void Update()
-        {
-            texture.Use(TextureUnit.Texture0);
-            texture2.Use(TextureUnit.Texture1);
-            m_shader.Use();
-
-            var model = Matrix4.Identity;
-            model = model * Matrix4.CreateTranslation(position.X / baseScale, position.Y / baseScale, 0);
-            model = model * Matrix4.CreateScale(baseScale + Window.mainCam.zoom * 10);
-
-
-            // IMPORTANT: OpenTK's matrix types are transposed from what OpenGL would expect - rows and columns are reversed.
-            // They are then transposed properly when passed to the shader. 
-            // This means that we retain the same multiplication order in both OpenTK c# code and GLSL shader code.
-            // If you pass the individual matrices to the shader and multiply there, you have to do in the order "model * view * projection".
-            // You can think like this: first apply the modelToWorld (aka model) matrix, then apply the worldToView (aka view) matrix, 
-            // and finally apply the viewToProjectedSpace (aka projection) matrix.
-            m_shader.SetMatrix4("model", model);
-            m_shader.SetMatrix4("view", Window.mainCam.view);
-            m_shader.SetMatrix4("projection", Window.m_projection);
-
-            GL.DrawElements(PrimitiveType.Triangles, m_indices.Length, DrawElementsType.UnsignedInt, 0);
-        }
-
         public void Unload()
         {
+            if (!enabled) return;
+            enabled = false;
+
             GL.DeleteBuffer(m_vertexBufferObject);
             GL.DeleteVertexArray(m_vertexArrayObject);
 
             GL.DeleteProgram(m_shader.Handle);
+        }
+
+        public void Delete()
+        {
+            Unload();
+            Window.sprites.Remove(this);
         }
     }
 }
