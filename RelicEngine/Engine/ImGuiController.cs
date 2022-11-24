@@ -9,6 +9,7 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using ImGuizmoNET;
 using ErrorCode = OpenTK.Graphics.OpenGL4.ErrorCode;
 using Debug = Relic.Engine.Debug;
 
@@ -55,6 +56,7 @@ namespace Relic.Engine
 
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
+            ImGuizmo.SetImGuiContext(context);
             var io = ImGui.GetIO();
             io.Fonts.AddFontDefault();
 
@@ -99,6 +101,7 @@ namespace Relic.Engine
             SetPerFrameImGuiData(1f / 60f);
 
             //SetPlatform();
+            //ImGuizmo.BeginFrame();
             ImGui.NewFrame();
             _frameBegun = true;
         }
@@ -270,6 +273,7 @@ void main()
 
             _frameBegun = true;
             ImGui.NewFrame();
+            //ImGuizmo.ImGuizmo_BeginFrame();
         }
 
         /// <summary>
