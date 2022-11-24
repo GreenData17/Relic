@@ -12,15 +12,6 @@ namespace Relic.Editor
     public class GuiInspector : Gui
     {
 
-        // TODO: These are Temp Variables!
-
-        private int fontSelected = 0;
-        private float fontSize = 12f;
-        private string text = "Testing Game Title";
-        
-        private List<MonoBehaviour> components = new List<MonoBehaviour>();
-        private Dictionary<string, object> value = new Dictionary<string, object>();
-
         public GuiInspector() : base("Inspector") { }
 
         public override void OnGui()
@@ -42,30 +33,22 @@ namespace Relic.Editor
             DragFloat("##rot", ref Window.instance.selectedGameObject.transform.rotation, format: Window.instance.selectedGameObject.transform.rotation.ToString("0.00") + "°");
             Space();
 
-            //====================
-
-            // TODO: Add List Foreach Component! ^^
-
-            components = Window.instance.selectedGameObject.GetComponents();
-
             try
             {
                 if (Window.instance.selectedGameObject != null)
                 {
-                    foreach (MonoBehaviour component in components)
+                    foreach (MonoBehaviour component in Window.instance.selectedGameObject.GetComponents())
                     {
                         component.BeginGui();
                     }
                 }
             }
             catch { }
-            
 
             AddComponentButton();
-
-            Window.instance.selectedGameObject.SetComponents(components);
         }
 
+        /*
         [Obsolete]
         public void ProcessComponent()
         {
@@ -155,7 +138,7 @@ namespace Relic.Editor
             Label(label);
             SameLine();
             InputText(label, ref value, 200);
-        }
+        }*/
 
         private void AddComponentButton()
         {
@@ -171,6 +154,7 @@ namespace Relic.Editor
                     if(ImGui.Button(monoBehaviour.GetType().Name, new System.Numerics.Vector2(100, 20)))
                     {
                         Window.instance.selectedGameObject.AddComponent((MonoBehaviour)Activator.CreateInstance(monoBehaviour.GetType()));
+                        ImGui.CloseCurrentPopup();
                     }
                 }
                 ImGui.EndPopup();
