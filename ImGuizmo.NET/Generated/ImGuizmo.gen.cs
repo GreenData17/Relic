@@ -15,7 +15,7 @@ namespace ImGuizmoNET
         }
         public static void BeginFrame()
         {
-            ImGuizmoNative.ImGuizmo_BeginFrame();
+            ImGuizmoNative.BeginFrame();
         }
         public static void DecomposeMatrixToComponents(ref float matrix, ref float translation, ref float rotation, ref float scale)
         {
@@ -76,7 +76,7 @@ namespace ImGuizmoNET
         }
         public static bool IsUsing()
         {
-            byte ret = ImGuizmoNative.ImGuizmo_IsUsing();
+            byte ret = ImGuizmoNative.IsUsing();
             return ret != 0;
         }
         public static bool Manipulate(ref float view, ref float projection, OPERATION operation, MODE mode, ref float matrix)
@@ -91,7 +91,7 @@ namespace ImGuizmoNET
                 {
                     fixed (float* native_matrix = &matrix)
                     {
-                        byte ret = ImGuizmoNative.ImGuizmo_Manipulate(native_view, native_projection, operation, mode, native_matrix, deltaMatrix, snap, localBounds, boundsSnap);
+                        byte ret = ImGuizmoNative.Manipulate(native_view, native_projection, operation, mode, native_matrix, deltaMatrix, snap, localBounds, boundsSnap);
                         return ret != 0;
                     }
                 }
@@ -110,7 +110,7 @@ namespace ImGuizmoNET
                     {
                         fixed (float* native_deltaMatrix = &deltaMatrix)
                         {
-                            byte ret = ImGuizmoNative.ImGuizmo_Manipulate(native_view, native_projection, operation, mode, native_matrix, native_deltaMatrix, snap, localBounds, boundsSnap);
+                            byte ret = ImGuizmoNative.Manipulate(native_view, native_projection, operation, mode, native_matrix, native_deltaMatrix, snap, localBounds, boundsSnap);
                             return ret != 0;
                         }
                     }
@@ -131,7 +131,7 @@ namespace ImGuizmoNET
                         {
                             fixed (float* native_snap = &snap)
                             {
-                                byte ret = ImGuizmoNative.ImGuizmo_Manipulate(native_view, native_projection, operation, mode, native_matrix, native_deltaMatrix, native_snap, localBounds, boundsSnap);
+                                byte ret = ImGuizmoNative.Manipulate(native_view, native_projection, operation, mode, native_matrix, native_deltaMatrix, native_snap, localBounds, boundsSnap);
                                 return ret != 0;
                             }
                         }
@@ -154,7 +154,7 @@ namespace ImGuizmoNET
                             {
                                 fixed (float* native_localBounds = &localBounds)
                                 {
-                                    byte ret = ImGuizmoNative.ImGuizmo_Manipulate(native_view, native_projection, operation, mode, native_matrix, native_deltaMatrix, native_snap, native_localBounds, boundsSnap);
+                                    byte ret = ImGuizmoNative.Manipulate(native_view, native_projection, operation, mode, native_matrix, native_deltaMatrix, native_snap, native_localBounds, boundsSnap);
                                     return ret != 0;
                                 }
                             }
@@ -179,7 +179,7 @@ namespace ImGuizmoNET
                                 {
                                     fixed (float* native_boundsSnap = &boundsSnap)
                                     {
-                                        byte ret = ImGuizmoNative.ImGuizmo_Manipulate(native_view, native_projection, operation, mode, native_matrix, native_deltaMatrix, native_snap, native_localBounds, native_boundsSnap);
+                                        byte ret = ImGuizmoNative.Manipulate(native_view, native_projection, operation, mode, native_matrix, native_deltaMatrix, native_snap, native_localBounds, native_boundsSnap);
                                         return ret != 0;
                                     }
                                 }
@@ -208,12 +208,12 @@ namespace ImGuizmoNET
         public static void SetDrawlist()
         {
             ImDrawList* drawlist = null;
-            ImGuizmoNative.ImGuizmo_SetDrawlist(drawlist);
+            ImGuizmoNative.SetDrawlist(drawlist);
         }
         public static void SetDrawlist(ImDrawListPtr drawlist)
         {
             ImDrawList* native_drawlist = drawlist.NativePtr;
-            ImGuizmoNative.ImGuizmo_SetDrawlist(native_drawlist);
+            ImGuizmoNative.SetDrawlist(native_drawlist);
         }
         public static void SetGizmoSizeClipSpace(float value)
         {
@@ -225,16 +225,16 @@ namespace ImGuizmoNET
         }
         public static void SetImGuiContext(IntPtr ctx)
         {
-            ImGuizmoNative.ImGuizmo_SetImGuiContext(ctx);
+            ImGuizmoNative.SetImGuiContext(ctx);
         }
         public static void SetOrthographic(bool isOrthographic)
         {
             byte native_isOrthographic = isOrthographic ? (byte)1 : (byte)0;
-            ImGuizmoNative.ImGuizmo_SetOrthographic(native_isOrthographic);
+            ImGuizmoNative.SetOrthographic(native_isOrthographic);
         }
         public static void SetRect(float x, float y, float width, float height)
         {
-            ImGuizmoNative.ImGuizmo_SetRect(x, y, width, height);
+            ImGuizmoNative.SetRect(x, y, width, height);
         }
         public static void ViewManipulate(ref float view, float length, Vector2 position, Vector2 size, uint backgroundColor)
         {

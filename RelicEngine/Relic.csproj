@@ -28,6 +28,12 @@
 			<PackagePath>runtimes/win-x64/native</PackagePath>
 			<Pack>true</Pack>
 		</Content>
+
+		<Content Include="..\deps\cimgui\win-x64\cimguizmo.dll">
+			<PackagePath>runtimes/win-x64/native</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+
 		<Content Include="..\deps\cimgui\linux-x64\cimgui.so">
 			<PackagePath>runtimes/linux-x64/native/libcimgui.so</PackagePath>
 			<Pack>true</Pack>
@@ -40,6 +46,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\ImGui.NET\ImGui.NET.csproj" />
+	  <ProjectReference Include="..\ImGuizmo.NET\ImGuizmo.NET.csproj" />
 	</ItemGroup>
 
   <ItemGroup>

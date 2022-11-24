@@ -7,6 +7,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using ImGuizmoNET;
 using Relic.DataTypes;
 using Relic.Editor;
 using Relic.Engine.UI;
@@ -319,6 +320,21 @@ namespace Relic.Engine
             }
 
             ImGui.Image((IntPtr)mainCam.bufferTexture.frameBufferName + ImGuiTextureOffset, new System.Numerics.Vector2(viewportSize.X, viewportSize.Y), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
+
+            if (selectedGameObject != null)
+            {
+                ImGuizmo.SetOrthographic(true);
+                ImGuizmo.SetDrawlist();
+
+                ImGuizmo.SetRect(ImGui.GetWindowPos().X, ImGui.GetWindowPos().Y, ImGui.GetWindowSize().X, ImGui.GetWindowSize().Y);
+
+                float view = mainCam.view.M14;
+                float projection = mainCam.projection.M14;
+                float matrix = 0;
+
+                ImGuizmo.Manipulate(ref view, ref projection, OPERATION.TRANSLATE, MODE.LOCAL, ref matrix);
+            }
+
             ImGui.End();
         }
 
