@@ -59,6 +59,9 @@ namespace Relic.Editor
             if(black) ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0,0,0,1));
             ImGui.Button(label, vec);
             ImGui.PopStyleColor();
+            ImGui.PopStyleColor();
+            ImGui.PopStyleColor();
+            if (black) ImGui.PopStyleColor();
         }
 
         //====================

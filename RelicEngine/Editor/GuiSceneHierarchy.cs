@@ -46,6 +46,8 @@ namespace Relic.Editor
                 EndMenuBar();
             }
 
+
+            // TODO: Add child/parent view
             ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, ImGui.GetFontSize() * 1);
             foreach (GameObject gameObject in Window.gameObjects)
             {

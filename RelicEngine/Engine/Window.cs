@@ -320,6 +320,8 @@ namespace Relic.Engine
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, System.Numerics.Vector2.Zero);
             ImGui.Begin("Viewport");
             ImGui.PopStyleVar();
+
+            // TODO: Fix size! get a scale value by taking with of framebuffer and imguiWindow and multiply with width and height
             if (viewportSize.X != ImGui.GetContentRegionAvail().X || viewportSize.Y != ImGui.GetContentRegionAvail().Y)
             {
                 viewportSize = new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y);
