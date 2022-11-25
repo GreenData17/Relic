@@ -62,7 +62,7 @@ namespace Relic.Engine
         //====================
 
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings()
-        { Size = new Vector2i(1600, 900), APIVersion = new Version(3, 3) })
+        { Size = new Vector2i(1920, 1018), APIVersion = new Version(3, 3) })
         { }
 
         void SelectedGameObjectChanged()
@@ -144,6 +144,7 @@ namespace Relic.Engine
             Title = "Relic: OpenGL Version: " + GL.GetString(StringName.Version);
             _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
             windowSize = new Vector2(ClientSize.X, ClientSize.Y); windowSize = new Vector2(ClientSize.X, ClientSize.Y);
+            WindowState = WindowState.Maximized;
         }
 
         private void SetupEnvironmentAndTransparency()
@@ -182,7 +183,8 @@ namespace Relic.Engine
         protected override void OnResize(ResizeEventArgs e)
         {
             base.OnResize(e);
-            UpdateWindowSize();
+            //UpdateWindowSize();
+            Size = new Vector2i(1920, 1080);
         }
 
         //====================
@@ -321,11 +323,11 @@ namespace Relic.Engine
             if (viewportSize.X != ImGui.GetContentRegionAvail().X || viewportSize.Y != ImGui.GetContentRegionAvail().Y)
             {
                 viewportSize = new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y);
-                mainCam.UpdateBuffer();
+                //mainCam.UpdateBuffer();
                 //debug.Debug.Log($"New Size w:{viewportSize.X} h:{viewportSize.Y}");
             }
 
-            ImGui.Image((IntPtr)mainCam.bufferTexture.frameBufferName + ImGuiTextureOffset, new System.Numerics.Vector2(viewportSize.X, viewportSize.Y), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
+            ImGui.Image((IntPtr)mainCam.bufferTexture.frameBufferName + ImGuiTextureOffset, new System.Numerics.Vector2(1920, 1080), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
             ImGui.End();
         }
 

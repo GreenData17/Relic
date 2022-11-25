@@ -32,7 +32,7 @@ namespace Relic.DataTypes
 
             GL.GenTextures(1, out _renderedBuffer);
             GL.BindTexture(TextureTarget.Texture2D, renderedBuffer);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 1024, 678, 0, PixelFormat.Rgba, PixelType.UnsignedByte, (IntPtr)0);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 1920, 1080, 0, PixelFormat.Rgba, PixelType.UnsignedByte, (IntPtr)0);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 
