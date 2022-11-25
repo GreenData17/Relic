@@ -96,8 +96,8 @@ namespace Relic.Engine.UI
             var tempScale = BASE_SCALE * (scale / 100f); // + Window.mainCam.zoom * 10;
 
             var model = Matrix4.Identity;
-            model = model * Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(gameObject.transform.rotation));
             model = model * Matrix4.CreateScale(size.X * tempScale, size.Y * tempScale, model.ExtractScale().Z);
+            model = model * Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(gameObject.transform.rotation));
             model = model * Matrix4.CreateTranslation(gameObject.transform.position.X, gameObject.transform.position.Y, 0);
 
 
