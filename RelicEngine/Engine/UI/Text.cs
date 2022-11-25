@@ -24,10 +24,15 @@ namespace Relic.Engine.UI
         private const float BASE_SCALE = 100f;
         public TextRenderingHint textRenderingHint = TextRenderingHint.AntiAlias;
 
+        public string fontName = "Consolas";
         public Font font { get => _font; set { _font = value; UpdateText(); } }
         private Font _font = new Font("Consolas", 24f, FontStyle.Regular);
         public float fontSize = 24;
         private float _fontSize = 24;
+        public bool bold { get => _bold; set {_bold = value; UpdateText();}}
+        public bool _bold = false;
+        public bool italic { get => _italic; set { _italic = value; UpdateText(); } }
+        public bool _italic = false;
         public Color color = Color.Black;
         private Color _color = Color.Black;
         public System.Numerics.Vector4 vColor = new System.Numerics.Vector4(0, 0, 0, 1);
@@ -78,7 +83,7 @@ namespace Relic.Engine.UI
             if (fontSize != _fontSize)
             {
                 _fontSize = fontSize;
-                font = new Font("Consolas", fontSize, FontStyle.Regular);
+                font = new Font(fontName, fontSize, FontStyle.Regular);
             }
 
             if (!_finishedInit) return;
@@ -112,6 +117,13 @@ namespace Relic.Engine.UI
         public void UpdateText()
         {
             if (string.IsNullOrEmpty(text)) return;
+
+            if (bold)
+                _font = new Font(fontName, 24f, FontStyle.Bold);
+            else if(italic)
+                _font = new Font(fontName, 24f, FontStyle.Italic);
+            else
+                _font = new Font(fontName, 24f, FontStyle.Regular);
 
             texture = null;
 
@@ -212,9 +224,51 @@ namespace Relic.Engine.UI
             Gui.Space(1);
 
 
+            Gui.Label("Style:");
+            Gui.SameLine(60);
+
+            if(bold) {
+                ImGuiNET.ImGui.PushStyleColor(ImGuiNET.ImGuiCol.Button, new System.Numerics.Vector4(0.23f, 0.37f, 0.58f, 1f));
+                ImGuiNET.ImGui.PushStyleColor(ImGuiNET.ImGuiCol.ButtonHovered, new System.Numerics.Vector4(0.29f, 0.47f, 0.73f, 1f));
+                // ImGuiNET.ImGui.PushStyleColor(ImGuiNET.ImGuiCol.Text, new System.Numerics.Vector4(0f, 0f, 0f, 1f));
+            }
+            else
+            {
+                ImGuiNET.ImGui.PushStyleColor(ImGuiNET.ImGuiCol.Button, new System.Numerics.Vector4(.24f, .24f, .24f, 1f));
+                ImGuiNET.ImGui.PushStyleColor(ImGuiNET.ImGuiCol.ButtonHovered, new System.Numerics.Vector4(0.39f, 0.39f, 0.39f, 1f));
+            }
+
+            if (Gui.Button("Bold", new Vector2(40, 20))) bold = !bold;
+            Gui.SameLine(105);
+
+            ImGuiNET.ImGui.PopStyleColor();
+            ImGuiNET.ImGui.PopStyleColor();
+
+            if (italic)
+            {
+                ImGuiNET.ImGui.PushStyleColor(ImGuiNET.ImGuiCol.Button, new System.Numerics.Vector4(0.23f, 0.37f, 0.58f, 1f));
+                ImGuiNET.ImGui.PushStyleColor(ImGuiNET.ImGuiCol.ButtonHovered, new System.Numerics.Vector4(0.29f, 0.47f, 0.73f, 1f));
+                // ImGuiNET.ImGui.PushStyleColor(ImGuiNET.ImGuiCol.Text, new System.Numerics.Vector4(0f, 0f, 0f, 1f));
+            }
+            else
+            {
+                ImGuiNET.ImGui.PushStyleColor(ImGuiNET.ImGuiCol.Button, new System.Numerics.Vector4(.24f, .24f, .24f, 1f));
+                ImGuiNET.ImGui.PushStyleColor(ImGuiNET.ImGuiCol.ButtonHovered, new System.Numerics.Vector4(0.39f, 0.39f, 0.39f, 1f));
+            }
+
+            if (Gui.Button("Italic", new Vector2(55, 20))) italic = !italic;
+
+            ImGuiNET.ImGui.PopStyleColor();
+            ImGuiNET.ImGui.PopStyleColor();
+            // ImGuiNET.ImGui.PopStyleColor();
+
+
+            Gui.Space(1);
+
+
             Gui.Label("Text:");
             Gui.SameLine(60);
-            Gui.InputTextMultiline("##text", ref text, new Vector2(240, 60), 200);
+            Gui.InputTextMultiline("##text", ref text, new Vector2(240, 60), 10_000);
 
 
             Gui.Space(1);
