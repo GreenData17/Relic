@@ -16,6 +16,12 @@ namespace Relic.Editor
 
         public override void OnGui()
         {
+            InputText("##name", ref Window.instance.selectedGameObject.name, 10_000);
+            SameLine(220);
+            Label("enabled ");
+            SameLine(280);
+            CheckBox("##Enabled ", ref Window.instance.selectedGameObject.enabled);
+            Space(5);
 
             Label("Transform");
             Space(5);

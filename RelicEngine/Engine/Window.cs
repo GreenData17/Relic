@@ -23,6 +23,9 @@ namespace Relic.Engine
         public static Vector2 windowSize;
         public Vector2 viewportSize = new Vector2(1024, 768);
         private const bool DEBUG_MODE = false;
+        
+        //  TODO: TEMP
+        public string SceneName = "DefaultScene";
 
 
         // Graphics Variables
@@ -95,12 +98,14 @@ namespace Relic.Engine
             //};
 
             var test = Instantiate(new GameObject());
+            test.name = "Start Button";
             test.transform.position = new Vector2(-280, 0);
             test.AddComponent(new Text(){text = "[START]" });
 
             selectedGameObject = test;
 
             InstantiateGui(new GuiInspector());
+            InstantiateGui(new GuiSceneHierarchy());
             //InstantiateGui(new GuiDockSpace());
             //InstantiateGui(new GuiDebuggingWindow());
 
@@ -215,7 +220,6 @@ namespace Relic.Engine
         {
             ImGui.DockSpaceOverViewport(ImGui.GetMainViewport());
             ViewPort();
-            gameobjects();
             Explorer();
 
             if (gui.Count >= 1)
@@ -319,27 +323,6 @@ namespace Relic.Engine
             }
 
             ImGui.Image((IntPtr)mainCam.bufferTexture.frameBufferName + ImGuiTextureOffset, new System.Numerics.Vector2(viewportSize.X, viewportSize.Y), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
-            ImGui.End();
-        }
-
-        private unsafe void gameobjects()
-        {
-            ImGui.Begin("GameObjects");
-
-            ImGuiTreeNodeFlags NoPushOnOpenFlag = ImGuiTreeNodeFlags.NoTreePushOnOpen | ImGuiTreeNodeFlags.Leaf;
-
-            ImGuiTreeNodeFlags treeFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.SpanFullWidth;
-            ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, ImGui.GetFontSize() * 1);
-
-            ImGui.TreeNodeEx("mainCam", treeFlags | NoPushOnOpenFlag);
-            if (ImGui.TreeNodeEx("titleScreen", treeFlags))
-            {
-                ImGui.TreeNodeEx("title", treeFlags | NoPushOnOpenFlag | ImGuiTreeNodeFlags.Selected);
-                ImGui.TreeNodeEx("startButton", treeFlags | NoPushOnOpenFlag);
-            }
-
-            ImGui.PopStyleVar();
-
             ImGui.End();
         }
 

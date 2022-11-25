@@ -94,10 +94,7 @@ namespace Relic.Editor
             return ImGui.Combo(label, ref currentItem, items, items.Length);
         }
 
-        public static bool CheckBox(string label, ref bool state)
-        {
-            return ImGui.Checkbox(label, ref state);
-        }
+        public static bool CheckBox(string label, ref bool state) => ImGui.Checkbox(label, ref state);
 
         // Menu's
 
@@ -106,6 +103,10 @@ namespace Relic.Editor
         public static bool BeginMenu(string label) => ImGui.BeginMenu(label);
         public static void EndMenu() => ImGui.EndMenu();
         public static bool MenuItem(string label) => ImGui.MenuItem(label);
+
+        // TreeNode's
+
+        public static bool TreeNode(string label, ImGuiTreeNodeFlags flags) => ImGui.TreeNodeEx(label, flags);
 
         //====================
         // -- Inputs --
@@ -182,6 +183,7 @@ namespace Relic.Editor
         //====================
 
         public static void SetStyleColor(ImGuiCol obj, Vector4 color) => ImGui.PushStyleColor(obj, color);
+        public static void PopStyleColor() => ImGui.PopStyleColor();
 
         public static void SameLine(float offsetFromStart = 0f, float spacing = 0f) =>
             ImGui.SameLine(offsetFromStart, spacing);
