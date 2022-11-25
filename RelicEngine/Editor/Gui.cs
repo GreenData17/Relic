@@ -49,13 +49,14 @@ namespace Relic.Editor
 
         public static void Label(string label) => ImGui.Text(label);
 
-        public static void SolidLabel(string label, Vector2 size, Vector4 color)
+        public static void SolidLabel(string label, Vector2 size, Vector4 color, bool black = false)
         {
             System.Numerics.Vector2 vec = new System.Numerics.Vector2(size.X, size.Y);
 
             ImGui.PushStyleColor(ImGuiCol.Button, color);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color);
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, color);
+            if(black) ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0,0,0,1));
             ImGui.Button(label, vec);
             ImGui.PopStyleColor();
         }

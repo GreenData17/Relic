@@ -43,7 +43,7 @@ namespace Relic.DataTypes
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
                 Window.instance.Close();
             else
-                Debug.Log("Framebuffer Complete!");
+                Debug.LogEngine("Framebuffer Complete!");
         }
 
         public void Update()

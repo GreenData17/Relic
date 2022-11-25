@@ -104,8 +104,11 @@ namespace Relic.Engine
 
             selectedGameObject = test;
 
+            Debug.Log("Hello World!");
+
             InstantiateGui(new GuiInspector());
             InstantiateGui(new GuiSceneHierarchy());
+            InstantiateGui(new GuiConsole());
             //InstantiateGui(new GuiDockSpace());
             //InstantiateGui(new GuiDebuggingWindow());
 
