@@ -42,11 +42,13 @@ namespace Relic.Engine
         {
             public string msg;
             public LogType type;
+            public DateTime time;
 
             public Messages(string msg, LogType type)
             {
                 this.msg = msg;
                 this.type = type;
+                this.time = DateTime.UtcNow;
             }
         }
     }
