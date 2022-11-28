@@ -23,7 +23,7 @@ namespace Relic.Editor
 
         public override void OnGui()
         {
-            ImGui.Begin(Window.instance.SceneName, ImGuiWindowFlags.MenuBar);
+            Begin(Window.instance.SceneName, ImGuiWindowFlags.MenuBar);
 
             if (BeginMenuBar())
             {
@@ -48,7 +48,7 @@ namespace Relic.Editor
 
 
             // TODO: Add child/parent view
-            ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, ImGui.GetFontSize() * 1);
+            SetStyleVar(ImGuiStyleVar.IndentSpacing, ImGui.GetFontSize() * 1);
             foreach (GameObject gameObject in Window.gameObjects)
             {
                 if (Window.instance.selectedGameObject == gameObject)
@@ -65,9 +65,9 @@ namespace Relic.Editor
                     }
                 }
             }
-            ImGui.PopStyleVar();
+            RemoveStyleVar();
             
-            ImGui.End();
+            End();
         }
     }
 }

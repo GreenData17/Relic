@@ -19,9 +19,9 @@ namespace Relic.Editor
 
         public override void OnGui()
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, System.Numerics.Vector2.Zero);
-            ImGui.Begin("DockSpace", flags);
-            ImGui.PopStyleVar();
+            SetStyleVar(ImGuiStyleVar.WindowPadding, System.Numerics.Vector2.Zero);
+            Begin("DockSpace", flags);
+            RemoveStyleVar();
             SetDockSpace();
 
             if (BeginMenuBar())
@@ -50,7 +50,7 @@ namespace Relic.Editor
 
             SetWindowPos(new Vector2(0));
             SetWindowSize(GetClientSize());
-            ImGui.End();
+            End();
         }
     }
 }

@@ -260,7 +260,7 @@ namespace Relic.Engine.UI
 
             ImGuiNET.ImGui.PopStyleColor();
             ImGuiNET.ImGui.PopStyleColor();
-            // ImGuiNET.ImGui.PopStyleColor();
+            // ImGuiNET.ImGui.RemoveStyleColor();
 
 
             Gui.Space(1);

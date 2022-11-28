@@ -21,9 +21,40 @@ namespace Relic.Editor
             Appearing = 8,
         }
 
-        public Gui(string windowName)
+        public enum ImGuiStyleVar
+        {
+            Alpha = 0,
+            DisabledAlpha = 1,
+            WindowPadding = 2,
+            WindowRounding = 3,
+            WindowBorderSize = 4,
+            WindowMinSize = 5,
+            WindowTitleAlign = 6,
+            ChildRounding = 7,
+            ChildBorderSize = 8,
+            PopupRounding = 9,
+            PopupBorderSize = 10,
+            FramePadding = 11,
+            FrameRounding = 12,
+            FrameBorderSize = 13,
+            ItemSpacing = 14,
+            ItemInnerSpacing = 15,
+            IndentSpacing = 16,
+            CellPadding = 17,
+            ScrollbarSize = 18,
+            ScrollbarRounding = 19,
+            GrabMinSize = 20,
+            GrabRounding = 21,
+            TabRounding = 22,
+            ButtonTextAlign = 23,
+            SelectableTextAlign = 24,
+            COUNT = 25,
+        }
+
+        public Gui(string windowName, bool CustomStart = false)
         {
             this.windowName = windowName;
+            customImGuiStart = CustomStart;
         }
 
         public void UpdateGui()
@@ -63,6 +94,9 @@ namespace Relic.Editor
             ImGui.PopStyleColor();
             if (black) ImGui.PopStyleColor();
         }
+
+        public static void Image(IntPtr ptr, System.Numerics.Vector2 size, System.Numerics.Vector2 uv0,
+            System.Numerics.Vector2 uv1) => ImGui.Image(ptr, size, uv0, uv1);
 
         //====================
         // -- Interactions --
@@ -186,8 +220,12 @@ namespace Relic.Editor
         // -- Styling --
         //====================
 
+        public static void SetStyleVar(ImGuiStyleVar var, float value) => ImGui.PushStyleVar((ImGuiNET.ImGuiStyleVar)var, value);
+        public static void SetStyleVar(ImGuiStyleVar var, System.Numerics.Vector2 value) => ImGui.PushStyleVar((ImGuiNET.ImGuiStyleVar)var, value);
+        public static void RemoveStyleVar() => ImGui.PopStyleVar();
+
         public static void SetStyleColor(ImGuiCol obj, Vector4 color) => ImGui.PushStyleColor(obj, color);
-        public static void PopStyleColor() => ImGui.PopStyleColor();
+        public static void RemoveStyleColor() => ImGui.PopStyleColor();
 
         public static void SameLine(float offsetFromStart = 0f, float spacing = 0f) =>
             ImGui.SameLine(offsetFromStart, spacing);
@@ -204,6 +242,7 @@ namespace Relic.Editor
         public static ImGuiIOPtr GetIO() => ImGui.GetIO();
         public static System.Numerics.Vector2 GetMousePos() => ImGui.GetMousePos();
         public static Vector2 GetClientSize() => new Vector2(Window.instance.ClientSize.X, Window.instance.ClientSize.Y);
+        public static System.Numerics.Vector2 GetContentRegionAvail() => ImGui.GetContentRegionAvail();
 
         // Set
 
@@ -221,6 +260,7 @@ namespace Relic.Editor
         // ImGui start/end
 
         public static void Begin(string label) => ImGui.Begin(label);
+        public static void Begin(string label, ImGuiWindowFlags flags) => ImGui.Begin(label, flags);
         public static void Begin(string label, ref bool open) => ImGui.Begin(label, ref open);
         public static void End() => ImGui.End();
     }
