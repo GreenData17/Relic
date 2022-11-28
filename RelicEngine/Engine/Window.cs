@@ -374,11 +374,19 @@ namespace Relic.Engine
             GL.BindVertexArray(0);
             GL.UseProgram(0);
 
-            // TODO add objects unloading
+            foreach (var gameObject in gameObjects)
+            {
+                foreach (var component in gameObject.components)
+                {
+                    component.Unload();
+                }
+            }
 
             Debug.LogEngine("Engine Closing...");
             ImGui.DestroyContext();
             base.OnUnload();
         }
+
+        public void Quit() => Close();
     }
 }
