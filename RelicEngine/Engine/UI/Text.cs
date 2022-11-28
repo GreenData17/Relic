@@ -119,11 +119,11 @@ namespace Relic.Engine.UI
             if (string.IsNullOrEmpty(text)) return;
 
             if (bold)
-                _font = new Font(fontName, 24f, FontStyle.Bold);
+                _font = new Font(fontName, _fontSize, FontStyle.Bold);
             else if(italic)
-                _font = new Font(fontName, 24f, FontStyle.Italic);
+                _font = new Font(fontName, _fontSize, FontStyle.Italic);
             else
-                _font = new Font(fontName, 24f, FontStyle.Regular);
+                _font = new Font(fontName, _fontSize, FontStyle.Regular);
 
             texture = null;
 
