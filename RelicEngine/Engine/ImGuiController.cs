@@ -468,7 +468,9 @@ void main()
                     ImDrawCmdPtr pcmd = cmd_list.CmdBuffer[cmd_i];
                     if (pcmd.UserCallback != IntPtr.Zero)
                     {
-                        throw new NotImplementedException();
+                        // throw new NotImplementedException();
+                        Debug.LogError("Error in RenderImDrawData! ImGuiController Line 472.");
+                        Window.instance.Quit();
                     }
                     else
                     {
