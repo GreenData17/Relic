@@ -110,7 +110,6 @@ namespace Relic.Engine
             InstantiateGui(new GuiSceneHierarchy());
             InstantiateGui(new GuiConsole());
             InstantiateGui(new GuiViewPort());
-            //InstantiateGui(new GuiDockSpace());
             //InstantiateGui(new GuiDebuggingWindow());
 
             scriptsList.Add(new Text());
