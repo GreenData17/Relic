@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using Relic.DataTypes;
 using Relic.Editor;
-using Relic.Engine;
+using System;
+using System.Drawing;
+using System.Drawing.Text;
 
 namespace Relic.Engine.UI
 {
@@ -103,10 +97,6 @@ namespace Relic.Engine.UI
 
             // IMPORTANT: OpenTK's matrix types are transposed from what OpenGL would expect - rows and columns are reversed.
             // They are then transposed properly when passed to the shader. 
-            // This means that we retain the same multiplication order in both OpenTK c# code and GLSL shader code.
-            // If you pass the individual matrices to the shader and multiply there, you have to do in the order "model * view * projection".
-            // You can think like this: first apply the modelToWorld (aka model) matrix, then apply the worldToView (aka view) matrix, 
-            // and finally apply the viewToProjectedSpace (aka projection) matrix.
             _shader.SetMatrix4("model", model);
             _shader.SetMatrix4("view", Window.view);
             _shader.SetMatrix4("projection", Window.projection);
@@ -132,8 +122,6 @@ namespace Relic.Engine.UI
             {
                 stringSize = g.MeasureString(text, font);
             }
-
-            // Debug.Log($"H: {stringSize.Height}, W: {stringSize.Width}");
 
             using (var bitmap = new Bitmap(Convert.ToInt32(stringSize.Width), Convert.ToInt32(stringSize.Height), System.Drawing.Imaging.PixelFormat.Format16bppRgb555))
             {
