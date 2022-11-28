@@ -25,7 +25,7 @@ namespace Relic.Editor
             CheckBox("##ShowInternalLog", ref showEngineLogs);
             Separator();
 
-            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new System.Numerics.Vector2(0,2));
+            SetStyleVar(ImGuiStyleVar.ItemSpacing, new System.Numerics.Vector2(0,2));
 
             for (int i = Debug.logs.Count; i > 0; i--)
             {
@@ -56,7 +56,7 @@ namespace Relic.Editor
 
             }
 
-            ImGui.PopStyleVar();
+            RemoveStyleVar();
         }
     }
 }
