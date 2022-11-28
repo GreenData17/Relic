@@ -51,6 +51,16 @@ namespace Relic.Editor
             COUNT = 25,
         }
 
+        public enum ImGuiSelectableFlags
+        {
+            None = 0,
+            DontClosePopups = 1,
+            SpanAllColumns = 2,
+            AllowDoubleClick = 4,
+            Disabled = 8,
+            AllowItemOverlap = 16,
+        }
+
         public Gui(string windowName, bool CustomStart = false)
         {
             this.windowName = windowName;
@@ -126,6 +136,8 @@ namespace Relic.Editor
             ImGui.PopStyleColor();
             return result;
         }
+
+        public static void Selectable(string label, ref bool selected, ImGuiSelectableFlags flags) => ImGui.Selectable(label, selected, (ImGuiNET.ImGuiSelectableFlags)flags);
 
         public static bool ComboBox(string label, ref int currentItem, string[] items)
         {
@@ -227,8 +239,8 @@ namespace Relic.Editor
         public static void SetStyleColor(ImGuiCol obj, Vector4 color) => ImGui.PushStyleColor(obj, color);
         public static void RemoveStyleColor() => ImGui.PopStyleColor();
 
-        public static void SameLine(float offsetFromStart = 0f, float spacing = 0f) =>
-            ImGui.SameLine(offsetFromStart, spacing);
+        public static void SameLine(float offsetFromStart = 0f, float spacing = 0f) => ImGui.SameLine(offsetFromStart, spacing);
+        public static void NewLine() => ImGui.NewLine();
 
         public static void Separator() => ImGui.Separator();
         public static void Space(float height = 10) => ImGui.Dummy(new System.Numerics.Vector2(0f, height));

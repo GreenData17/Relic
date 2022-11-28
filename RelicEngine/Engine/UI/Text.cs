@@ -8,7 +8,6 @@ using System.Drawing.Text;
 
 namespace Relic.Engine.UI
 {
-    // TODO CLEANUP
     public class Text : MonoBehaviour
     {
         public uint order = 0;
