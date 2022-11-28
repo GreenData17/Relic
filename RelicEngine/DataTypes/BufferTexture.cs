@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using Relic.Engine;
 
 namespace Relic.DataTypes
@@ -22,6 +23,8 @@ namespace Relic.DataTypes
             private set { _renderedBuffer = value; }
         }
 
+        public Vector2i BufferSize = new Vector2i(1920, 1080);
+
         private int _frameBufferName;
         private int _renderedBuffer;
 
@@ -32,7 +35,7 @@ namespace Relic.DataTypes
 
             GL.GenTextures(1, out _renderedBuffer);
             GL.BindTexture(TextureTarget.Texture2D, renderedBuffer);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 1920, 1080, 0, PixelFormat.Rgba, PixelType.UnsignedByte, (IntPtr)0);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, BufferSize.X, BufferSize.Y, 0, PixelFormat.Rgba, PixelType.UnsignedByte, (IntPtr)0);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 
