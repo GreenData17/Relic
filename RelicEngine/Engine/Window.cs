@@ -62,7 +62,7 @@ namespace Relic.Engine
         //====================
 
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings()
-        { Size = new Vector2i(1920, 1018), APIVersion = new Version(3, 3) })
+        { Size = new Vector2i(1920, 1010), APIVersion = new Version(3, 3) })
         { }
 
         void SelectedGameObjectChanged()
@@ -109,6 +109,7 @@ namespace Relic.Engine
             InstantiateGui(new GuiInspector());
             InstantiateGui(new GuiSceneHierarchy());
             InstantiateGui(new GuiConsole());
+            InstantiateGui(new GuiViewPort());
             //InstantiateGui(new GuiDockSpace());
             //InstantiateGui(new GuiDebuggingWindow());
 
@@ -224,7 +225,7 @@ namespace Relic.Engine
         private void ImGuiUpdates()
         {
             ImGui.DockSpaceOverViewport(ImGui.GetMainViewport());
-            ViewPort();
+            //ViewPort();
             Explorer();
 
             if (gui.Count >= 1)
@@ -318,7 +319,7 @@ namespace Relic.Engine
         private unsafe void ViewPort()
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, System.Numerics.Vector2.Zero);
-            ImGui.Begin("Viewport");
+            ImGui.Begin("Viewport - old");
             ImGui.PopStyleVar();
 
             // TODO: Fix size! get a scale value by taking with of framebuffer and imguiWindow and multiply with width and height
