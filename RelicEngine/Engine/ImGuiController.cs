@@ -88,9 +88,9 @@ namespace Relic.Engine
             }
 
             if (io.ConfigFlags == ImGuiConfigFlags.ViewportsEnable && io.BackendFlags == ImGuiBackendFlags.PlatformHasViewports)
-                Debug.Log("sub window support!");
+                Debug.LogEngine("sub window support!");
             else
-                Debug.LogWarning("No sub window support");
+                Debug.LogEngine("No sub window support");
 
             //altRecreateFontDeviceTexture();
             CreateDeviceResources();
