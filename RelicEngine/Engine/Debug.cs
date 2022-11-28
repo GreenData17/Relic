@@ -15,8 +15,8 @@ namespace Relic.Engine
         }
 
         private static Vector4 logColor = new Vector4(1, 1, 1, 1);
-        private static Vector4 warningColor = new Vector4(1, 0, 0, 1);
-        private static Vector4 errorColor = new Vector4(1, 1, 1, 1);
+        private static Vector4 warningColor = new Vector4(1, .8f, 0, 1);
+        private static Vector4 errorColor = new Vector4(1, 0, 0, 1);
         private static Vector4 engineColor = new Vector4(0, .5f, .8f, 1);
 
         public static List<Messages> logs { get{return _logs;} private set{_logs = value;}}
