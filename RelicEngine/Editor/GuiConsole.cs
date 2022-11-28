@@ -12,6 +12,7 @@ namespace Relic.Editor
     public class GuiConsole : Gui
     {
         private bool showEngineLogs;
+        private bool showTime = true;
 
         public GuiConsole() : base("Console") { }
 
@@ -23,6 +24,10 @@ namespace Relic.Editor
             Label(" Internal Logs ");
             SameLine();
             CheckBox("##ShowInternalLog", ref showEngineLogs);
+            SameLine();
+            Label(" Show Time ");
+            SameLine();
+            CheckBox("##ShowTime", ref showTime);
             Separator();
 
             SetStyleVar(ImGuiStyleVar.ItemSpacing, new System.Numerics.Vector2(0,2));
@@ -31,6 +36,10 @@ namespace Relic.Editor
             {
                 if (Debug.logs[i-1].type == Debug.LogType.Engine && !showEngineLogs) continue;
 
+                SolidLabel(" ", new Vector2(GetWindowSize().X, 20), new Vector4(.2f, .2f, .2f, 1));
+                SameLine(10);
+
+                SetStyleVar(ImGuiStyleVar.FrameRounding, 12);
                 if (Debug.logs[i - 1].type == Debug.LogType.Log)
                 {
                     SolidLabel("LOG", new Vector2(60, 20), new Vector4(1, 1, 1, 1), true);
@@ -44,15 +53,18 @@ namespace Relic.Editor
                 {
                     SolidLabel("ENGINE", new Vector2(60, 20), new Vector4(0, .5f, .8f, 1));
                 }
-                SameLine(0,0);
-                SolidLabel(" ", new Vector2(GetWindowSize().X,20), new Vector4(.2f,.2f,.2f,1));
+                RemoveStyleVar();
+                
 
                 // TODO: add logType Image
                 SameLine(75);
                 Label($"{Debug.logs[i-1].msg}");
 
-                SameLine(GetWindowSize().X-80);
-                Label($"[{Debug.logs[i - 1].time:HH:mm:ss}]");
+                if (showTime)
+                {
+                    SameLine(GetWindowSize().X - 90);
+                    Label($"[{Debug.logs[i - 1].time:HH:mm:ss}]");
+                }
 
             }
 
