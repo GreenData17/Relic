@@ -87,6 +87,8 @@ namespace Relic.Engine
             ImGui.PushStyleColor(ImGuiCol.TitleBgActive, new System.Numerics.Vector4(0f,0f,0f,1f));
             ImGui.PushStyleColor(ImGuiCol.Tab, new System.Numerics.Vector4(.3f,.3f,.3f,1f));
 
+            Debug.LogCustom("Styles Loaded!", "ImGui", new System.Numerics.Vector4(.6f,0,.5f,1));
+
             // TODO: all object initialization should happen outside of this call
             //var text = new Text("start")
             //{

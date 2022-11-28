@@ -42,16 +42,20 @@ namespace Relic.Editor
                 SetStyleVar(ImGuiStyleVar.FrameRounding, 12);
                 if (Debug.logs[i - 1].type == Debug.LogType.Log)
                 {
-                    SolidLabel("LOG", new Vector2(60, 20), new Vector4(1, 1, 1, 1), true);
+                    SolidLabel("LOG", new Vector2(60, 20), Debug.logs[i - 1].color, true);
                 }else if (Debug.logs[i - 1].type == Debug.LogType.Error)
                 {
-                    SolidLabel("ERROR", new Vector2(60, 20), new Vector4(1, 0, 0, 1));
+                    SolidLabel("ERROR", new Vector2(60, 20), Debug.logs[i - 1].color);
                 }else if (Debug.logs[i - 1].type == Debug.LogType.Warning)
                 {
-                    SolidLabel("WARNING", new Vector2(60, 20), new Vector4(1, .8f, 0, 1), true);
+                    SolidLabel("WARNING", new Vector2(60, 20), Debug.logs[i - 1].color, true);
+                }else if (Debug.logs[i - 1].type == Debug.LogType.Custom)
+                {
+                    Vector4 color = Debug.logs[i - 1].color;
+                    SolidLabel(Debug.logs[i - 1].prefix.ToUpper(), new Vector2(60, 20), color, !(color.X + color.Y + color.Z / 3f < .8f));
                 }else if (Debug.logs[i - 1].type == Debug.LogType.Engine)
                 {
-                    SolidLabel("ENGINE", new Vector2(60, 20), new Vector4(0, .5f, .8f, 1));
+                    SolidLabel("ENGINE", new Vector2(60, 20), Debug.logs[i - 1].color);
                 }
                 RemoveStyleVar();
                 
