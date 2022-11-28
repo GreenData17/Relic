@@ -7,6 +7,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Numerics;
 using Relic.DataTypes;
 using Relic.Editor;
 using Relic.Engine.UI;
@@ -83,6 +84,8 @@ namespace Relic.Engine
             SetupDefaultTexture();
             ImGui.StyleColorsDark();
 
+            ImGui.PushStyleColor(ImGuiCol.TitleBgActive, new System.Numerics.Vector4(0f,0f,0f,1f));
+            ImGui.PushStyleColor(ImGuiCol.Tab, new System.Numerics.Vector4(.3f,.3f,.3f,1f));
 
             // TODO: all object initialization should happen outside of this call
             //var text = new Text("start")
@@ -97,12 +100,23 @@ namespace Relic.Engine
             //    position = new Vector2(-280, 100)
             //};
 
-            var test = Instantiate(new GameObject());
-            test.name = "Start Button";
-            test.transform.position = new Vector2(-280, 0);
-            test.AddComponent(new Text(){text = "[START]" });
+            var test0 = Instantiate(new GameObject());
+            test0.name = "Title Text";
+            test0.transform.position = new Vector2(0, 230);
+            test0.transform.rotation = 15f;
+            test0.AddComponent(new Text() { text = "The Game", fontSize = 130, bold = true});
 
-            selectedGameObject = test;
+            var test1 = Instantiate(new GameObject());
+            test1.name = "Start Button";
+            test1.transform.position = new Vector2(0, 0);
+            test1.AddComponent(new Text(){text = "[START]", fontSize = 40});
+
+            var test2 = Instantiate(new GameObject());
+            test2.name = "Exit Button";
+            test2.transform.position = new Vector2(0, -80);
+            test2.AddComponent(new Text() { text = "[EXIT]", fontSize = 40 });
+
+            selectedGameObject = test1;
 
             Debug.Log("Hello World!");
 
@@ -111,6 +125,8 @@ namespace Relic.Engine
             InstantiateGui(new GuiConsole());
             InstantiateGui(new GuiViewPort());
             //InstantiateGui(new GuiDebuggingWindow());
+
+            debWin = new GuiDebuggingWindow();
 
             scriptsList.Add(new Text());
 
@@ -221,6 +237,10 @@ namespace Relic.Engine
             GL.Clear(ClearBufferMask.ColorBufferBit);
         }
 
+        private bool debugMenu = false;
+        private bool imGuiMenu = false;
+        private GuiDebuggingWindow debWin = null;
+
         private void ImGuiUpdates()
         {
             ImGui.DockSpaceOverViewport(ImGui.GetMainViewport());
@@ -233,6 +253,9 @@ namespace Relic.Engine
                     item.UpdateGui();
                 }
             }
+
+            if(debugMenu) debWin.OnGui();
+            if(imGuiMenu) ImGui.ShowDemoWindow();
 
             if (ImGui.BeginMainMenuBar())
             {
@@ -250,6 +273,8 @@ namespace Relic.Engine
 
                 if (ImGui.BeginMenu("Help"))
                 {
+                    if (ImGui.MenuItem("Debug Menu")) debugMenu = !debugMenu;
+                    if (ImGui.MenuItem("Imgui Menu")) imGuiMenu = !imGuiMenu;
 
                     ImGui.EndMenu();
                 }
