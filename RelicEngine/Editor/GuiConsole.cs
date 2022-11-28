@@ -59,8 +59,7 @@ namespace Relic.Editor
                 }
                 RemoveStyleVar();
                 
-
-                // TODO: add logType Image
+                
                 SameLine(75);
                 Label($"{Debug.logs[i-1].msg}");
 
