@@ -90,17 +90,6 @@ namespace Relic.Engine
             Debug.LogCustom("Styles Loaded!", "ImGui", new System.Numerics.Vector4(.6f,0,.5f,1));
 
             // TODO: all object initialization should happen outside of this call
-            //var text = new Text("start")
-            //{
-            //    text = "[START]",
-            //    position = new Vector2(-280, 0)
-            //};
-
-            //var hello = new Text("Hello")
-            //{
-            //    text = "Testing Game Title",
-            //    position = new Vector2(-280, 100)
-            //};
 
             var test0 = Instantiate(new GameObject());
             test0.name = "Title Text";
@@ -126,6 +115,7 @@ namespace Relic.Engine
             InstantiateGui(new GuiSceneHierarchy());
             InstantiateGui(new GuiConsole());
             InstantiateGui(new GuiViewPort());
+            InstantiateGui(new GuiFileExplorer());
             //InstantiateGui(new GuiDebuggingWindow());
 
             debWin = new GuiDebuggingWindow();
@@ -246,7 +236,6 @@ namespace Relic.Engine
         private void ImGuiUpdates()
         {
             ImGui.DockSpaceOverViewport(ImGui.GetMainViewport());
-            Explorer();
 
             if (gui.Count >= 1)
             {
@@ -336,24 +325,6 @@ namespace Relic.Engine
         {
             gameObjects.Add(gameObject);
             return gameObject;
-        }
-
-
-        // TODO: Put All ImGui stuff in separate script
-
-        private bool selected;
-        private unsafe void Explorer()
-        {
-            ImGui.Begin("File Explorer");
-
-            ImGui.Button("Home");
-            ImGui.SameLine();
-            ImGui.Button("<");
-            ImGui.NewLine();
-            ImGui.Text("HOME:\\Scene\\");
-            ImGui.Selectable("SampleScene", ref selected, ImGuiSelectableFlags.SpanAllColumns);
-
-            ImGui.End();
         }
 
         //====================
