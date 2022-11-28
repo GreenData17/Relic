@@ -13,6 +13,8 @@ using Relic.Editor;
 using Relic.Engine.UI;
 using Debug = Relic.Engine.Debug;
 using ErrorCode = OpenTK.Windowing.GraphicsLibraryFramework.ErrorCode;
+using System.IO;
+using System.Reflection;
 
 namespace Relic.Engine
 {
@@ -91,6 +93,21 @@ namespace Relic.Engine
 
             // TODO: all object initialization should happen outside of this call
 
+            //Assembly myAssembly1 = Assembly.GetExecutingAssembly();
+            //string[] names = myAssembly1.GetManifestResourceNames();
+            //foreach (string name in names)
+            //{
+            //    Debug.LogEngine(name);
+            //}
+
+            Assembly myAssembly = Assembly.GetExecutingAssembly();
+            Stream myStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.ProfileIcon-transparent.png");
+            Bitmap bmp = new Bitmap(myStream);
+
+            var test3 = Instantiate(new GameObject());
+            test3.name = "ProfilPicture";
+            test3.AddComponent(new Sprite() { size = new Vector2(1000), texture = Texture.LoadFromBitmap(bmp)});
+
             var test0 = Instantiate(new GameObject());
             test0.name = "Title Text";
             test0.transform.position = new Vector2(0, 230);
@@ -113,14 +130,14 @@ namespace Relic.Engine
 
             InstantiateGui(new GuiInspector());
             InstantiateGui(new GuiSceneHierarchy());
-            InstantiateGui(new GuiConsole());
             InstantiateGui(new GuiViewPort());
             InstantiateGui(new GuiFileExplorer());
-            //InstantiateGui(new GuiDebuggingWindow());
+            InstantiateGui(new GuiConsole());
 
             debWin = new GuiDebuggingWindow();
 
             scriptsList.Add(new Text());
+            scriptsList.Add(new Sprite());
 
         }
 
