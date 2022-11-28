@@ -225,7 +225,6 @@ namespace Relic.Engine
         private void ImGuiUpdates()
         {
             ImGui.DockSpaceOverViewport(ImGui.GetMainViewport());
-            //ViewPort();
             Explorer();
 
             if (gui.Count >= 1)
@@ -315,24 +314,6 @@ namespace Relic.Engine
 
 
         // TODO: Put All ImGui stuff in separate script
-
-        private unsafe void ViewPort()
-        {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, System.Numerics.Vector2.Zero);
-            ImGui.Begin("Viewport - old");
-            ImGui.PopStyleVar();
-
-            // TODO: Fix size! get a scale value by taking with of framebuffer and imguiWindow and multiply with width and height
-            if (viewportSize.X != ImGui.GetContentRegionAvail().X || viewportSize.Y != ImGui.GetContentRegionAvail().Y)
-            {
-                viewportSize = new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y);
-                //mainCam.UpdateBuffer();
-                //debug.Debug.Log($"New Size w:{viewportSize.X} h:{viewportSize.Y}");
-            }
-
-            ImGui.Image((IntPtr)mainCam.bufferTexture.frameBufferName + ImGuiTextureOffset, new System.Numerics.Vector2(1920, 1080), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
-            ImGui.End();
-        }
 
         private bool selected;
         private unsafe void Explorer()
