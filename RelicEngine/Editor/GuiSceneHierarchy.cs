@@ -39,6 +39,12 @@ namespace Relic.Editor
                         obj.name = "New Text";
                         obj.AddComponent(new Text() { text = "New Text" });
                     }
+                    if (MenuItem("Sprite"))
+                    {
+                        var obj = Window.Instantiate(new GameObject());
+                        obj.name = "New Sprite";
+                        obj.AddComponent(new Sprite() { size = new Vector2(100)});
+                    }
 
                     EndMenu();
                 }

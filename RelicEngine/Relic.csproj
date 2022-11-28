@@ -15,6 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="InternalImages\ProfileIcon-transparent.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.7.5" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
   </ItemGroup>
@@ -37,6 +41,10 @@
 			<PackagePath>runtimes/osx/native/libcimgui.dylib</PackagePath>
 			<Pack>true</Pack>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="InternalImages\ProfileIcon-transparent.png" />
 	</ItemGroup>
 
 	<ItemGroup>

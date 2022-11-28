@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using ImGuiNET;
 using Relic.Editor;
 
 namespace Relic.Engine
@@ -81,8 +82,8 @@ namespace Relic.Engine
             Gui.Separator();
             Gui.Label(label);
 
-            Gui.SameLine(42);
-            if (Gui.SolidButton("Delete", null, new Vector4(0.3f, 0.3f, 0.3f, 1.0f)))
+            Gui.SameLine(Gui.GetContentRegionAvail().X - 50);
+            if (Gui.SolidButton("Delete", new Vector2(50,20), new Vector4(0.3f, 0.3f, 0.3f, 1.0f)))
             {
                 gameObject.RemoveComponent(this);
             }
