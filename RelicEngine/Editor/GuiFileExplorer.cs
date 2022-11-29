@@ -248,28 +248,28 @@ namespace Relic.Editor
             switch (name.ToLower())
             {
                 case "assets":
-                    DrawFolder(assetFolder, size);
+                    DrawIcon(assetFolder, size);
                     break;
                 case "art":
                 case "graphics":
-                    DrawFolder(artFolder, size);
+                    DrawIcon(artFolder, size);
                     break;
                 case "scripts":
                 case "code":
-                    DrawFolder(scriptsFolder, size);
+                    DrawIcon(scriptsFolder, size);
                     break;
                 case "music":
                 case "sounds":
-                    DrawFolder(musicFolder, size);
+                    DrawIcon(musicFolder, size);
                     break;
                 case "fonts":
-                    DrawFolder(fontsFolder, size);
+                    DrawIcon(fontsFolder, size);
                     break;
                 case "plugins":
-                    DrawFolder(pluginsFolder, size);
+                    DrawIcon(pluginsFolder, size);
                     break;
                 default:
-                    DrawFolder(normalFolder, size);
+                    DrawIcon(normalFolder, size);
                     break;
             }
         }
@@ -279,18 +279,18 @@ namespace Relic.Editor
             switch (name.ToLower())
             {
                 case ".scene":
-                    DrawFolder(sceneFile, size);
+                    DrawIcon(sceneFile, size);
                     break;
                 case ".temp":
-                    DrawFolder(tempFile, size);
+                    DrawIcon(tempFile, size);
                     break;
                 default:
-                    DrawFolder(normalFile, size);
+                    DrawIcon(normalFile, size);
                     break;
             }
         }
 
-        public void DrawFolder(Texture texture, int size)
+        public void DrawIcon(Texture texture, int size)
         {
             Image((IntPtr)texture.handle, new System.Numerics.Vector2(size, size), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
         }
