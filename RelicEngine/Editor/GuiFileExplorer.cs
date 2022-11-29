@@ -24,7 +24,8 @@ namespace Relic.Editor
         }
         private string _currentFolder;
 
-        public List<FolderInfo> folder = new List<FolderInfo>();
+        public List<FolderInfo> folders = new List<FolderInfo>();
+        public List<DataInfo> files = new List<DataInfo>();
 
         // Icons
         public Texture normalFolder;
@@ -34,6 +35,10 @@ namespace Relic.Editor
         public Texture pluginsFolder;
         public Texture musicFolder;
         public Texture fontsFolder;
+
+        public Texture normalFile;
+        public Texture tempFile;
+        public Texture sceneFile;
 
 
         private bool bigIcons;
@@ -75,6 +80,17 @@ namespace Relic.Editor
             fontsFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
 
 
+
+            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file.png");
+            normalFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
+
+            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Temp.png");
+            tempFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
+
+            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Scene.png");
+            sceneFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
+
+
             if (!Directory.Exists(_MainPath + "/Assets")) Directory.CreateDirectory(_MainPath + "/Assets");
         }
 
@@ -105,7 +121,7 @@ namespace Relic.Editor
             EndChild();
 
 
-            foreach (var folderInfo in folder)
+            foreach (var folderInfo in folders)
             {
                 if (folderInfo.open) currentFolder += $"/{folderInfo.folderName}";
             }
@@ -115,13 +131,23 @@ namespace Relic.Editor
 
         public void DirectoryChanged()
         {
-            folder = new List<FolderInfo>();
+            folders = new List<FolderInfo>();
 
             foreach (var directory in Directory.GetDirectories(_MainPath + currentFolder))
             {
                 DirectoryInfo info = new DirectoryInfo(directory);
 
-                folder.Add(new FolderInfo() { folderName = info.Name});
+                folders.Add(new FolderInfo() { folderName = info.Name});
+            }
+
+
+            files = new List<DataInfo>();
+
+            foreach (var file in Directory.GetFiles(_MainPath + currentFolder))
+            {
+                FileInfo info = new FileInfo(_MainPath + currentFolder + file);
+
+                files.Add(new DataInfo() { fileName = info.Name });
             }
         }
 
@@ -144,7 +170,7 @@ namespace Relic.Editor
                         ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
                         new System.Numerics.Vector2(100))) if (ImGui.IsMouseDoubleClicked(0))
                 {
-                    foreach (var folderInfo in folder)
+                    foreach (var folderInfo in folders)
                     {
                         if (folderInfo.folderName == info.Name) folderInfo.open = true;
                     }
@@ -181,7 +207,7 @@ namespace Relic.Editor
                         ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
                         new System.Numerics.Vector2(GetContentRegionAvail().X, 20))) if (ImGui.IsMouseDoubleClicked(0))
                 {
-                    foreach (var folderInfo in folder)
+                    foreach (var folderInfo in folders)
                     {
                         if (folderInfo.folderName == info.Name) folderInfo.open = true;
                     }
@@ -192,6 +218,28 @@ namespace Relic.Editor
 
                 SameLine(40);
                 Label(info.Name);
+            }
+
+            foreach (var file in Directory.GetFiles(_MainPath + currentFolder))
+            {
+                FileInfo info = new FileInfo(_MainPath + currentFolder + "/" + file);
+
+                //Button("##Folder", new Vector2(GetContentRegionAvail().X, 20));
+                if (Selectable("##Folder", ref selected,
+                        ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
+                        new System.Numerics.Vector2(GetContentRegionAvail().X, 20))) if (ImGui.IsMouseDoubleClicked(0))
+                {
+                    foreach (var fileInfo in files)
+                    {
+                        if (fileInfo.fileName == info.Name) fileInfo.open = true;
+                    }
+                }
+                SameLine(15);
+
+                SelectFileImage(info.Extension, 20);
+
+                SameLine(40);
+                Label(info.Name.Replace(info.Extension, ""));
             }
         }
 
@@ -226,6 +274,22 @@ namespace Relic.Editor
             }
         }
 
+        private void SelectFileImage(string name, int size)
+        {
+            switch (name.ToLower())
+            {
+                case ".scene":
+                    DrawFolder(sceneFile, size);
+                    break;
+                case ".temp":
+                    DrawFolder(tempFile, size);
+                    break;
+                default:
+                    DrawFolder(normalFile, size);
+                    break;
+            }
+        }
+
         public void DrawFolder(Texture texture, int size)
         {
             Image((IntPtr)texture.handle, new System.Numerics.Vector2(size, size), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
@@ -236,6 +300,12 @@ namespace Relic.Editor
         public class FolderInfo
         {
             public string folderName;
+            public bool open;
+        }
+
+        public class DataInfo
+        {
+            public string fileName;
             public bool open;
         }
     }

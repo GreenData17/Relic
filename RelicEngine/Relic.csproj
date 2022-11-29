@@ -15,6 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="InternalImages\file-scene.png" />
+    <None Remove="InternalImages\file-temp.png" />
+    <None Remove="InternalImages\file.png" />
     <None Remove="InternalImages\folder-Art.png" />
     <None Remove="InternalImages\folder-Assets.png" />
     <None Remove="InternalImages\folder-Favorite.png" />
@@ -52,6 +55,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <EmbeddedResource Include="InternalImages\file-Scene.png" />
+	  <EmbeddedResource Include="InternalImages\file-Temp.png" />
+	  <EmbeddedResource Include="InternalImages\file.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Art.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Assets.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Favorite.png" />
