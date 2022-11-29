@@ -193,7 +193,47 @@ namespace Relic.Editor
                 ImGui.EndGroup();
                 drawnIcons++;
             }
-            
+
+
+
+            foreach (var file in Directory.GetFiles(_MainPath + currentFolder))
+            {
+                if (drawnIcons == maxAmountIcons) drawnIcons = 0;
+                else SameLine();
+
+                FileInfo info = new FileInfo(_MainPath + currentFolder + file);
+
+                ImGui.BeginGroup();
+
+                //Button("##Folder", new Vector2(GetContentRegionAvail().X, 20));
+                if (Selectable("##Folder", ref selected,
+                        ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
+                        new System.Numerics.Vector2(100))) if (ImGui.IsMouseDoubleClicked(0))
+                {
+                    foreach (var fileinfo in files)
+                    {
+                        if (fileinfo.fileName == info.Name) fileinfo.open = true;
+                    }
+                }
+                SameLine(5);
+
+                ImGui.BeginGroup();
+                SelectFileImage(info.Extension, 80);
+
+                string folderName = info.Name.Replace(info.Extension, "");
+                if (info.Name.Length > 11)
+                {
+                    folderName = info.Name.Remove(11, info.Name.Length - 11);
+                    folderName += "...";
+                }
+
+                Label(folderName);
+                ImGui.EndGroup();
+
+                ImGui.EndGroup();
+                drawnIcons++;
+            }
+
         }
 
         private void DrawSmallIcons()
