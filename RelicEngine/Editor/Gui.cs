@@ -137,7 +137,8 @@ namespace Relic.Editor
             return result;
         }
 
-        public static void Selectable(string label, ref bool selected, ImGuiSelectableFlags flags) => ImGui.Selectable(label, selected, (ImGuiNET.ImGuiSelectableFlags)flags);
+        public static bool Selectable(string label, ref bool selected, ImGuiSelectableFlags flags, System.Numerics.Vector2 size) => 
+            ImGui.Selectable(label, selected, (ImGuiNET.ImGuiSelectableFlags)flags, size);
 
         public static bool ComboBox(string label, ref int currentItem, string[] items)
         {
@@ -275,5 +276,13 @@ namespace Relic.Editor
         public static void Begin(string label, ImGuiWindowFlags flags) => ImGui.Begin(label, flags);
         public static void Begin(string label, ref bool open) => ImGui.Begin(label, ref open);
         public static void End() => ImGui.End();
+
+        // child begin/end
+
+        public static void BeginChild(string label) => ImGui.BeginChild(label);
+        public static void BeginChild(string label, System.Numerics.Vector2 size, bool border = false, ImGuiWindowFlags flags = ImGuiWindowFlags.None) => 
+            ImGui.BeginChild(label, size, border, flags);
+
+        public static void EndChild() => ImGui.EndChild();
     }
 }

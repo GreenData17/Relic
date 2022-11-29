@@ -15,6 +15,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="InternalImages\folder-Art.png" />
+    <None Remove="InternalImages\folder-Assets.png" />
+    <None Remove="InternalImages\folder-Favorite.png" />
+    <None Remove="InternalImages\folder-fonts.png" />
+    <None Remove="InternalImages\folder-music.png" />
+    <None Remove="InternalImages\folder-Plugins.png" />
+    <None Remove="InternalImages\folder-Scripts.png" />
+    <None Remove="InternalImages\folder.png" />
     <None Remove="InternalImages\ProfileIcon-transparent.png" />
   </ItemGroup>
 
@@ -44,7 +52,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <EmbeddedResource Include="InternalImages\folder-Art.png" />
+	  <EmbeddedResource Include="InternalImages\folder-Assets.png" />
+	  <EmbeddedResource Include="InternalImages\folder-Favorite.png" />
+	  <EmbeddedResource Include="InternalImages\folder-Fonts.png" />
+	  <EmbeddedResource Include="InternalImages\folder-Music.png" />
+	  <EmbeddedResource Include="InternalImages\folder-Plugins.png" />
+	  <EmbeddedResource Include="InternalImages\folder.png" />
 	  <EmbeddedResource Include="InternalImages\ProfileIcon-transparent.png" />
+	  <EmbeddedResource Include="InternalImages\folder-Scripts.png" />
 	</ItemGroup>
 
 	<ItemGroup>
