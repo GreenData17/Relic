@@ -35,19 +35,10 @@ namespace Relic.Editor
         public Texture pluginsFolder;
         public Texture musicFolder;
         public Texture fontsFolder;
-        public Texture tempFolder;
-        public Texture buildFolder;
-        public Texture settingsFolder;
-        public Texture sceneFolder;
 
         public Texture normalFile;
         public Texture tempFile;
         public Texture sceneFile;
-        public Texture textFile;
-        public Texture artFile;
-        public Texture scriptFile;
-        public Texture musicFile;
-        public Texture settingFile;
 
 
         private bool bigIcons;
@@ -85,20 +76,8 @@ namespace Relic.Editor
             textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Music.png");
             musicFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
 
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Builds.png");
-            buildFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Settings.png");
-            settingsFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
             textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Fonts.png");
             fontsFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Temp.png");
-            tempFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Scenes.png");
-            sceneFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
 
 
 
@@ -110,21 +89,6 @@ namespace Relic.Editor
 
             textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Scene.png");
             sceneFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Text.png");
-            textFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Art.png");
-            artFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Script.png");
-            scriptFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Music.png");
-            musicFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Setting.png");
-            settingFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
 
 
             if (!Directory.Exists(_MainPath + "/Assets")) Directory.CreateDirectory(_MainPath + "/Assets");
@@ -338,23 +302,11 @@ namespace Relic.Editor
                 case "sounds":
                     DrawIcon(musicFolder, size);
                     break;
-                case "builds":
-                    DrawIcon(buildFolder, size);
-                    break;
                 case "fonts":
                     DrawIcon(fontsFolder, size);
                     break;
-                case "temp":
-                    DrawIcon(tempFolder, size);
-                    break;
-                case "scenes":
-                    DrawIcon(sceneFolder, size);
-                    break;
                 case "plugins":
                     DrawIcon(pluginsFolder, size);
-                    break;
-                case "project settings":
-                    DrawIcon(settingsFolder, size);
                     break;
                 default:
                     DrawIcon(normalFolder, size);
@@ -366,25 +318,6 @@ namespace Relic.Editor
         {
             switch (name.ToLower())
             {
-                case ".jpeg":
-                case ".jpg":
-                case ".bmp":
-                case ".png":
-                    DrawIcon(artFile, size);
-                    break;
-                case ".cs":
-                    DrawIcon(scriptFile, size);
-                    break;
-                case ".wav":
-                case ".mp3":
-                    DrawIcon(musicFile, size);
-                    break;
-                case ".txt":
-                    DrawIcon(textFile, size);
-                    break;
-                case ".project":
-                    DrawIcon(settingFile, size);
-                    break;
                 case ".scene":
                     DrawIcon(sceneFile, size);
                     break;

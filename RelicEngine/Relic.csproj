@@ -15,25 +15,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="InternalImages\file-Art.png" />
-    <None Remove="InternalImages\file-music.png" />
     <None Remove="InternalImages\file-scene.png" />
-    <None Remove="InternalImages\file-Script.png" />
-    <None Remove="InternalImages\file-Setting.png" />
     <None Remove="InternalImages\file-temp.png" />
-    <None Remove="InternalImages\file-Text.png" />
     <None Remove="InternalImages\file.png" />
     <None Remove="InternalImages\folder-Art.png" />
     <None Remove="InternalImages\folder-Assets.png" />
-    <None Remove="InternalImages\folder-Builds.png" />
     <None Remove="InternalImages\folder-Favorite.png" />
     <None Remove="InternalImages\folder-fonts.png" />
     <None Remove="InternalImages\folder-music.png" />
     <None Remove="InternalImages\folder-Plugins.png" />
-    <None Remove="InternalImages\folder-Scenes.png" />
     <None Remove="InternalImages\folder-Scripts.png" />
-    <None Remove="InternalImages\folder-Settings.png" />
-    <None Remove="InternalImages\folder-temp.png" />
     <None Remove="InternalImages\folder.png" />
     <None Remove="InternalImages\ProfileIcon-transparent.png" />
   </ItemGroup>
@@ -64,24 +55,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="InternalImages\file-Art.png" />
-	  <EmbeddedResource Include="InternalImages\file-Music.png" />
 	  <EmbeddedResource Include="InternalImages\file-Scene.png" />
-	  <EmbeddedResource Include="InternalImages\file-Script.png" />
-	  <EmbeddedResource Include="InternalImages\file-Setting.png" />
 	  <EmbeddedResource Include="InternalImages\file-Temp.png" />
-	  <EmbeddedResource Include="InternalImages\file-Text.png" />
 	  <EmbeddedResource Include="InternalImages\file.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Art.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Assets.png" />
-	  <EmbeddedResource Include="InternalImages\folder-Builds.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Favorite.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Fonts.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Music.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Plugins.png" />
-	  <EmbeddedResource Include="InternalImages\folder-Scenes.png" />
-	  <EmbeddedResource Include="InternalImages\folder-Settings.png" />
-	  <EmbeddedResource Include="InternalImages\folder-Temp.png" />
 	  <EmbeddedResource Include="InternalImages\folder.png" />
 	  <EmbeddedResource Include="InternalImages\ProfileIcon-transparent.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Scripts.png" />
