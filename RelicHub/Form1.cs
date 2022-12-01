@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Windows.Forms;
 
@@ -5,26 +6,17 @@ namespace RelicHub
 {
     public partial class Form1 : Form
     {
-        public List<projectInfo>? projects = new List<projectInfo>();
+        public static Form1 instance;
+
+        public List<ProjectInfo>? projects = new List<ProjectInfo>();
         private string jsonContent;
 
         public Form1()
         {
             InitializeComponent();
+            instance = this;
 
-            jsonContent = File.ReadAllText(Application.StartupPath + "/project.json");
-            projects = JsonSerializer.Deserialize<List<projectInfo>>(jsonContent, new JsonSerializerOptions() { WriteIndented = true, IncludeFields = true });
-
-            for (int i = 0; i < projects.Count; i++)
-            {
-                projectItem Item = new projectItem(projects[i].name, projects[i].path);
-                Item.Tag = "project_" + projects[i].name;
-                Item.Size = new Size(ProjectViewer.Size.Width - 25, 80);
-
-                if (i % 2 == 0) Item.BackColor = Color.LightGray;
-
-                ProjectViewer.Controls.Add(Item);
-            }
+            UpdateList();
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
@@ -46,12 +38,41 @@ namespace RelicHub
             Enabled = false;
         }
 
-        public class projectInfo
+        public void UpdateList()
+        {
+            ProjectViewer.Controls.Clear();
+
+            jsonContent = File.ReadAllText(Application.StartupPath + "/project.json");
+            projects = JsonSerializer.Deserialize<List<ProjectInfo>>(jsonContent, new JsonSerializerOptions() { WriteIndented = true, IncludeFields = true });
+
+            List<ProjectInfo> info = new List<ProjectInfo>();
+
+            for (int i = 0; i < projects.Count; i++)
+            {
+                if (!Directory.Exists(projects[i].path)) continue;
+
+                projectItem Item = new projectItem(projects[i].name, projects[i].path);
+                Item.Tag = "project_" + projects[i].name;
+                Item.Size = new Size(ProjectViewer.Size.Width - 25, 80);
+
+                if (i % 2 == 0) Item.BackColor = Color.LightGray;
+
+                ProjectViewer.Controls.Add(Item);
+                info.Add(new ProjectInfo(projects[i].name, projects[i].path));
+            }
+
+            projects = info;
+
+            jsonContent = JsonSerializer.Serialize(projects.ToArray(), new JsonSerializerOptions() { WriteIndented = true, IncludeFields = true });
+            File.WriteAllText($"{Application.StartupPath}/project.json", jsonContent);
+        }
+
+        public class ProjectInfo
         {
             public string name;
             public string path;
 
-            public projectInfo(string name, string path)
+            public ProjectInfo(string name, string path)
             {
                 this.name = name;
                 this.path = path;
