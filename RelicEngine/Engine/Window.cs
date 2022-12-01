@@ -67,7 +67,7 @@ namespace Relic.Engine
 
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings()
             { Size = new Vector2i(1920, 1010), APIVersion = new Version(3, 3) })
-        { executionPath = Assembly.GetExecutingAssembly().Location; executionPath = executionPath.Remove(executionPath.Length-10,10); Debug.Log(executionPath);}
+        { executionPath = Assembly.GetExecutingAssembly().Location; executionPath = executionPath.Remove(executionPath.Length-10,10); }
 
         void SelectedGameObjectChanged()
         {
@@ -113,7 +113,9 @@ namespace Relic.Engine
             test0.name = "Title Text";
             test0.transform.position = new Vector2(0, 230);
             test0.transform.rotation = 15f;
-            test0.AddComponent(new Text() { text = "The Game", fontSize = 130, bold = true});
+            var title = new Text() { text = "The Game", fontSize = 130, bold = true, color = Color.White, vColor = new System.Numerics.Vector4(1,1,1,1)};
+            test0.AddComponent(title);
+            title = null;
 
             var test1 = Instantiate(new GameObject());
             test1.name = "Start Button";

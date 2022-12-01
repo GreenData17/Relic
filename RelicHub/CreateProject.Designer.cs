@@ -124,6 +124,7 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "CreateProject";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CreateProject";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CreateProject_FormClosing);
             this.ResumeLayout(false);
