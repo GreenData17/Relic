@@ -12,10 +12,27 @@ namespace RelicHub
 {
     public partial class projectItem : UserControl
     {
-        public projectItem(string gameName, string projectPath)
+        public string name = "";
+        public string path = "";
+
+        public projectItem(string projectName, string projectPath)
         {
             InitializeComponent();
-            label1.Text = gameName;
+            label1.Text = projectName;
+            name = projectName;
+            path = projectPath;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenProject(path);
+        }
+
+        public static void OpenProject(string path)
+        {
+            string command = $@"/K {Application.StartupPath}\Engine\Relic.exe {path}";
+            System.Diagnostics.Process.Start("CMD.exe", command);
+            Application.Exit();
         }
     }
 }

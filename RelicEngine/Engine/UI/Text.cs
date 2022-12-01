@@ -155,7 +155,7 @@ namespace Relic.Engine.UI
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
             GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StreamDraw);
 
-            _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
+            _shader = Window.defaultShader;
             _shader.Use();
 
             // Texture

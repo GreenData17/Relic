@@ -42,6 +42,7 @@ namespace Relic.Engine
 
         // Default Variables
         public static Bitmap noTextureBitmap;
+        public static string executionPath = "";
 
 
         // GameObject
@@ -65,8 +66,8 @@ namespace Relic.Engine
         //====================
 
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings()
-        { Size = new Vector2i(1920, 1010), APIVersion = new Version(3, 3) })
-        { }
+            { Size = new Vector2i(1920, 1010), APIVersion = new Version(3, 3) })
+        { executionPath = Assembly.GetExecutingAssembly().Location; executionPath = executionPath.Remove(executionPath.Length-10,10); Debug.Log(executionPath);}
 
         void SelectedGameObjectChanged()
         {
@@ -190,7 +191,7 @@ namespace Relic.Engine
             mainCam.bufferTexture = new BufferTexture();
         }
 
-        private void SetupDefaultShader() => defaultShader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
+        private void SetupDefaultShader() => defaultShader = new Shader($"{executionPath}/Shaders/shader.vert", $"{executionPath}/Shaders/shader.frag");
 
         private void SetupDefaultTexture()
         {

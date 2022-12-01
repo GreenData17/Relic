@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,9 +13,9 @@ namespace RelicHub
 {
     public partial class CreateProject : Form
     {
-        public Form1 mainWin;
+        public Form1? mainWin;
 
-        private string path;
+        private string path = "";
 
         public CreateProject()
         {
@@ -43,6 +44,28 @@ namespace RelicHub
         private void btt_cancle_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void btt_Create_Click(object sender, EventArgs e)
+        {
+            string savePath = Application.StartupPath + "/project.json";
+            if (!File.Exists(savePath)) { File.Create(savePath); }
+
+            Form1.projectInfo info = new Form1.projectInfo(NameText.Text, PathText.Text);
+            mainWin.projects.Insert(0, info);
+
+            string jsonContent = JsonSerializer.Serialize(mainWin.projects.ToArray(), new JsonSerializerOptions(){WriteIndented = true, IncludeFields = true});
+            File.WriteAllText(savePath, jsonContent);
+
+            Directory.CreateDirectory(PathText.Text);
+            Directory.CreateDirectory(PathText.Text + @"\Assets");
+            Directory.CreateDirectory(PathText.Text + @"\Builds");
+            Directory.CreateDirectory(PathText.Text + @"\Project Settings");
+            Directory.CreateDirectory(PathText.Text + @"\temp");
+            File.Create(PathText.Text + $@"\{NameText.Text}.project");
+
+            mainWin.Enabled = true;
+            projectItem.OpenProject(PathText.Text);
         }
     }
 }
