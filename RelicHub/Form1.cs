@@ -1,17 +1,24 @@
+using System.Text.Json;
 using System.Windows.Forms;
 
 namespace RelicHub
 {
     public partial class Form1 : Form
     {
+        public List<projectInfo>? projects = new List<projectInfo>();
+        private string jsonContent;
+
         public Form1()
         {
             InitializeComponent();
 
-            for (int i = 0; i < 200; i++)
+            jsonContent = File.ReadAllText(Application.StartupPath + "/project.json");
+            projects = JsonSerializer.Deserialize<List<projectInfo>>(jsonContent, new JsonSerializerOptions() { WriteIndented = true, IncludeFields = true });
+
+            for (int i = 0; i < projects.Count; i++)
             {
-                projectItem Item = new projectItem("Game_"+i, "");
-                Item.Tag = i;
+                projectItem Item = new projectItem(projects[i].name, projects[i].path);
+                Item.Tag = "project_" + projects[i].name;
                 Item.Size = new Size(ProjectViewer.Size.Width - 25, 80);
 
                 if (i % 2 == 0) Item.BackColor = Color.LightGray;
@@ -37,6 +44,18 @@ namespace RelicHub
             cp.Show();
             cp.mainWin = this;
             Enabled = false;
+        }
+
+        public class projectInfo
+        {
+            public string name;
+            public string path;
+
+            public projectInfo(string name, string path)
+            {
+                this.name = name;
+                this.path = path;
+            }
         }
     }
 }

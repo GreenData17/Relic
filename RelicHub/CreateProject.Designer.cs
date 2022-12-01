@@ -108,6 +108,7 @@
             this.btt_Create.TabIndex = 6;
             this.btt_Create.Text = "Create";
             this.btt_Create.UseVisualStyleBackColor = true;
+            this.btt_Create.Click += new System.EventHandler(this.btt_Create_Click);
             // 
             // CreateProject
             // 
