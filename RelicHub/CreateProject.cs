@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -48,10 +49,12 @@ namespace RelicHub
 
         private void btt_Create_Click(object sender, EventArgs e)
         {
+            if (!Directory.Exists(path)) {SystemSounds.Hand.Play(); return;}
+
             string savePath = Application.StartupPath + "/project.json";
             if (!File.Exists(savePath)) { File.Create(savePath); }
 
-            Form1.projectInfo info = new Form1.projectInfo(NameText.Text, PathText.Text);
+            Form1.ProjectInfo info = new Form1.ProjectInfo(NameText.Text, PathText.Text);
             mainWin.projects.Insert(0, info);
 
             string jsonContent = JsonSerializer.Serialize(mainWin.projects.ToArray(), new JsonSerializerOptions(){WriteIndented = true, IncludeFields = true});
@@ -65,7 +68,7 @@ namespace RelicHub
             File.Create(PathText.Text + $@"\{NameText.Text}.project");
 
             mainWin.Enabled = true;
-            projectItem.OpenProject(PathText.Text);
+            projectItem.OpenProject(PathText.Text, NameText.Text);
         }
     }
 }
