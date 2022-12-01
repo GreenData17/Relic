@@ -76,7 +76,7 @@ namespace RelicHub
 
             if (info == null) Application.Exit();
 
-            string command = $@"/C {Application.StartupPath}\Engine\Relic.exe {path}";
+            string command = $@"/C {Application.StartupPath}\Engine\Debug\net5.0\Relic.exe {path}";
             System.Diagnostics.Process.Start("CMD.exe", command);
             Application.Exit();
         }

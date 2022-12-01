@@ -27,9 +27,7 @@ namespace Relic.Engine.UI
         public bool italic { get => _italic; set { _italic = value; UpdateText(); } }
         public bool _italic = false;
         public Color color = Color.Black;
-        private Color _color = Color.Black;
         public System.Numerics.Vector4 vColor = new System.Numerics.Vector4(0, 0, 0, 1);
-        private System.Numerics.Vector4 _vColor = new System.Numerics.Vector4(0, 0, 0, 1);
         public string text = "";
         private string _text = "";
         public Texture texture = null;
@@ -191,11 +189,11 @@ namespace Relic.Engine.UI
         {
             Gui.Label("Color:");
             Gui.SameLine(60);
-            Gui.ColorButton("Text color", ref _vColor, new System.Numerics.Vector2(Gui.GetWindowSize().X - 180, 20));
+            Gui.ColorButton("Text color", ref vColor, new System.Numerics.Vector2(Gui.GetWindowSize().X - 180, 20));
             Gui.SameLine(200);
             if (Gui.Button("Update Color", new Vector2(100, 20)))
             {
-                color = Color.FromArgb((int)MathF.Floor(_vColor.W * 255f), (int)MathF.Floor(_vColor.X * 255f), (int)MathF.Floor(_vColor.Y * 255f), (int)MathF.Floor(_vColor.Z * 255f));
+                color = Color.FromArgb((int)MathF.Floor(vColor.W * 255f), (int)MathF.Floor(vColor.X * 255f), (int)MathF.Floor(vColor.Y * 255f), (int)MathF.Floor(vColor.Z * 255f));
                 UpdateText();
             }
 
