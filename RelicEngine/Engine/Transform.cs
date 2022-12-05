@@ -1,17 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Relic.DataTypes;
 
 namespace Relic.Engine
 {
     public class Transform
     {
-        public Vector2 position;
+        public Vector2 position
+        {
+            get => _position;
+            set { _position = value; PositionChanged(); }
+        }
+        private Vector2 _position;
+
         public float rotation;
 
+        // Events
+        public EventHandler OnPositionChanged;
+        private void PositionChanged()
+        {
+            EventHandler handler = OnPositionChanged;
+            handler?.Invoke(this, null);
+        }
 
         public Transform()
         {

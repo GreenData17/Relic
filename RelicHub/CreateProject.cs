@@ -63,7 +63,7 @@ namespace RelicHub
             Directory.CreateDirectory(PathText.Text);
             Directory.CreateDirectory(PathText.Text + @"\Assets");
             Directory.CreateDirectory(PathText.Text + @"\Builds");
-            Directory.CreateDirectory(PathText.Text + @"\Project Settings");
+            Directory.CreateDirectory(PathText.Text + @"\Settings");
             Directory.CreateDirectory(PathText.Text + @"\temp");
             File.Create(PathText.Text + $@"\{NameText.Text}.project");
 

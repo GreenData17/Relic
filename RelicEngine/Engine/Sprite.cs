@@ -1,20 +1,14 @@
-﻿using OpenTK.Mathematics;
+﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using Relic.DataTypes;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Graphics.OpenGL4;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace Relic.Engine
 {
     public class Sprite : MonoBehaviour
     {
         public uint order = 0;
-        public Vector2 size;
+        public Vector2 size = new(100);
         public float scale = 1f;
 
         private const float BASE_SCALE = 100f;
@@ -53,35 +47,34 @@ namespace Relic.Engine
             texture = Texture.LoadFromBitmap(Window.noTextureBitmap);
         }
 
-        public override void Start()
-        {
-            size = new Vector2(100);
-        }
-
         public override void Update()
         {
+            if (Window.mainCam is null) return;
             if (!_finishedInit) return;
             texture.Use(TextureUnit.Texture0);
             texture2?.Use(TextureUnit.Texture1);
 
             _shader.Use();
 
-            var tempScale = BASE_SCALE * (scale / 100f); // + Window.mainCam.zoom * 10;
+            var tempScale = BASE_SCALE * (scale / 100f);
 
             var model = Matrix4.Identity;
-            model = model * Matrix4.CreateScale(size.X * tempScale, size.Y * tempScale, model.ExtractScale().Z);
-            model = model * Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(gameObject.transform.rotation));
-            model = model * Matrix4.CreateTranslation(gameObject.transform.position.X, gameObject.transform.position.Y, 0);
+            model *= Matrix4.CreateScale(size.X * tempScale, size.Y * tempScale, model.ExtractScale().Z);
+            model *= Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(gameObject.transform.rotation));
+            model *= Matrix4.CreateTranslation(gameObject.transform.position.X, gameObject.transform.position.Y, 0);
 
 
             // IMPORTANT: OpenTK's matrix types are transposed from what OpenGL would expect - rows and columns are reversed.
             // They are then transposed properly when passed to the shader. 
             _shader.SetMatrix4("model", model);
-            _shader.SetMatrix4("view", Window.view);
-            _shader.SetMatrix4("projection", Window.projection);
+            _shader.SetMatrix4("view", Window.mainCam.view);
+            _shader.SetMatrix4("projection", Window.mainCam.projection);
             _shader.SetVector4("overlayColor", Shader.ColorToVector4(overlayColor));
 
             GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
+
+            if(overlayColor == Color.White) return;
+            _shader.SetVector4("overlayColor", Shader.ColorToVector4(Color.White));
         }
 
         public override void Load()

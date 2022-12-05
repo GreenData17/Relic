@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Relic.Engine
 {
@@ -14,21 +11,24 @@ namespace Relic.Engine
             Log, Warning, Error, Engine, Custom
         }
 
+        // colors
         private static Vector4 logColor = new Vector4(1, 1, 1, 1);
         private static Vector4 warningColor = new Vector4(1, .8f, 0, 1);
         private static Vector4 errorColor = new Vector4(1, 0, 0, 1);
         private static Vector4 engineColor = new Vector4(0, .5f, .8f, 1);
 
+        // a list of all logs since last ClearConsole();
         public static List<Messages> logs { get{return _logs;} private set{_logs = value;}}
         private static List<Messages> _logs = new List<Messages>();
 
+        // All log type calls
         public static void Log(string msg) { SendToConsole(msg, "LOG   ", ConsoleColor.White); logs.Add(new Messages(msg, LogType.Log, logColor));}
         public static void LogWarning(string msg) { SendToConsole(msg, "WARN  ", ConsoleColor.Yellow); logs.Add(new Messages(msg, LogType.Warning, warningColor)); }
         public static void LogError(string msg) { SendToConsole(msg, "ERROR ", ConsoleColor.Red); logs.Add(new Messages(msg, LogType.Error, errorColor)); }
         public static void LogEngine(string msg) { SendToConsole(msg, "ENGINE", ConsoleColor.Cyan); logs.Add(new Messages(msg, LogType.Engine, engineColor)); }
         public static void LogCustom(string msg, string prefix, Vector4 color) { SendToConsole(msg, prefix, ConsoleColor.Cyan); logs.Add(new Messages(msg, LogType.Custom, color, prefix)); }
 
-        //====================
+        
 
         private static void SendToConsole(string msg, string prefix, ConsoleColor color)
         {
@@ -43,7 +43,10 @@ namespace Relic.Engine
             Console.WriteLine($" {msg}");
         }
 
-
+        public static void ClearConsole()
+        {
+            logs.Clear();
+        }
 
         public class Messages
         {

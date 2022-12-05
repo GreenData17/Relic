@@ -39,6 +39,9 @@ namespace Relic.Engine
         {
             components.Add(component);
             component.gameObject = this;
+            component.Start();
+            component.Load();
+            component._finishedInit = true;
         }
 
         public void RemoveComponent(MonoBehaviour component)

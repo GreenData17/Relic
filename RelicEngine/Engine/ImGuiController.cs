@@ -16,6 +16,9 @@ namespace Relic.Engine
 {
     public class ImGuiController : IDisposable
     {
+        // Don't know enough to clean up this Code.
+        // I would give Credit if I hadn't forgotten where I got it from...
+
         private bool _frameBegun;
 
         private int _vertexArray;

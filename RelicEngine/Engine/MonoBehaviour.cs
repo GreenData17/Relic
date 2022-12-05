@@ -24,10 +24,6 @@ namespace Relic.Engine
             inheritor = this;
             enabled = true;
             if (inheritor.GetType() == typeof(MonoBehaviour)) Window.instance.Close();
-            Start();
-            Load();
-            _finishedInit = true;
-            PrintPublicVars();
         }
 
         public virtual void Start()
@@ -83,6 +79,9 @@ namespace Relic.Engine
             Gui.Label(label);
 
             Gui.SameLine(Gui.GetContentRegionAvail().X - 50);
+
+            // TODO: Make it possible to switch between cameras! ex. Button labeled: "Make Main" or "Take Main Camera OwnerShip".
+            if (GetType() != typeof(Camera))
             if (Gui.SolidButton("Delete", new Vector2(50,20), new Vector4(0.3f, 0.3f, 0.3f, 1.0f)))
             {
                 gameObject.RemoveComponent(this);
