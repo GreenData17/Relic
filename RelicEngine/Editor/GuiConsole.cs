@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Relic.Engine;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using ImGuiNET;
-using Relic.Engine;
 
 namespace Relic.Editor
 {

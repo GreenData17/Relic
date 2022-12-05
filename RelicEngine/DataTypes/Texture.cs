@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OpenTK.Graphics.OpenGL4;
+using Relic.Engine;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Graphics.OpenGL4;
+using System.IO;
+using System.Reflection;
 
 namespace Relic.DataTypes
 {
@@ -21,11 +20,13 @@ namespace Relic.DataTypes
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, handle);
 
+            // Create Bitmap
             var bitmap = new Bitmap(_bitmap);
             bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             Image img = bitmap;
-            byte[,,] data = new byte[bitmap.Height, bitmap.Width, 4];
 
+            // Fix Pixel format
+            byte[,,] data = new byte[bitmap.Height, bitmap.Width, 4];
             for (int y = 0; y < bitmap.Height; y++)
             {
                 for (int x = 0; x < bitmap.Width; x++)
@@ -37,8 +38,7 @@ namespace Relic.DataTypes
                 }
             }
 
-
-
+            // Generate OpenGL Texture
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, data);
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
@@ -49,11 +49,33 @@ namespace Relic.DataTypes
 
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
-
+            // Do the work for the GC
             data = null;
             bitmap.Dispose();
+            Window.loadedTextures += 1;
 
             return new Texture(handle);
+        }
+
+        public static Texture LoadFromResource(String resourcePath)
+        {
+            Assembly myAssembly = Assembly.GetExecutingAssembly();
+            Stream myStream = myAssembly.GetManifestResourceStream(resourcePath);
+            Bitmap bmp = new Bitmap(myStream);
+
+            return Texture.LoadFromBitmap(bmp);
+        }
+
+        public static void OutputResources()
+        {
+            Assembly myAssembly1 = Assembly.GetExecutingAssembly();
+            string[] names = myAssembly1.GetManifestResourceNames();
+            Debug.LogEngine("========== Resources ==========");
+            foreach (string name in names)
+            {
+                Debug.LogEngine(name);
+            }
+            Debug.LogEngine("========== Resources ==========");
         }
 
         public Texture(int glHandle)
@@ -63,8 +85,6 @@ namespace Relic.DataTypes
 
         // Activate texture
         // Multiple textures can be bound, if your shader needs more than just one.
-        // If you want to do that, use GL.ActiveTexture to set which slot GL.BindTexture binds to.
-        // The OpenGL standard requires that there be at least 16, but there can be more depending on your graphics card.
         public void Use(TextureUnit unit)
         {
             GL.ActiveTexture(unit);

@@ -8,7 +8,14 @@ namespace Relic.Editor
 {
     public class Gui
     {
-        // TODO: MORE INPUT OPTIONS / MORE STUFF
+        // Search for [INDEX] to jump between Sections.
+        // Between sections Keep at least tree lines Empty.
+        //
+        // 1. [INDEX] ImGui Decorations
+        // 2. [INDEX] ImGui Input
+        // 3. [INDEX] ImGui Styling
+        // 4. [INDEX] ImGui System
+
         public string windowName;
         public bool customImGuiStart;
 
@@ -84,9 +91,7 @@ namespace Relic.Editor
         {
         }
 
-        //====================
-        // -- Editor Calls --
-        //====================
+        // [INDEX] ImGui Decorations
 
         public static void Label(string label) => ImGui.Text(label);
 
@@ -108,9 +113,7 @@ namespace Relic.Editor
         public static void Image(IntPtr ptr, System.Numerics.Vector2 size, System.Numerics.Vector2 uv0,
             System.Numerics.Vector2 uv1) => ImGui.Image(ptr, size, uv0, uv1);
 
-        //====================
-        // -- Interactions --
-        //====================
+        // [INDEX] ImGui Interactions
 
         public static bool Button(string label, Vector2 size = null)
         {
@@ -159,9 +162,7 @@ namespace Relic.Editor
 
         public static bool TreeNode(string label, ImGuiTreeNodeFlags flags) => ImGui.TreeNodeEx(label, flags);
 
-        //====================
-        // -- Inputs --
-        //====================
+        // [INDEX] ImGui Input
 
         // int
         public static void DragInt(string label, ref int value)
@@ -229,9 +230,7 @@ namespace Relic.Editor
             }
         }
 
-        //====================
-        // -- Styling --
-        //====================
+        // [INDEX] ImGui Styling
 
         public static void SetStyleVar(ImGuiStyleVar var, float value) => ImGui.PushStyleVar((ImGuiNET.ImGuiStyleVar)var, value);
         public static void SetStyleVar(ImGuiStyleVar var, System.Numerics.Vector2 value) => ImGui.PushStyleVar((ImGuiNET.ImGuiStyleVar)var, value);
@@ -247,9 +246,7 @@ namespace Relic.Editor
         public static void Space(float height = 10) => ImGui.Dummy(new System.Numerics.Vector2(0f, height));
         public static System.Numerics.Vector2 GetWindowSize() => ImGui.GetWindowSize();
 
-        //====================
-        // -- ImGui system --
-        //====================
+        // [INDEX] ImGui System
 
         // Get
         public static ImGuiIOPtr GetIO() => ImGui.GetIO();

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Numerics;
-using System.Reflection;
-using ImGuiNET;
+﻿using ImGuiNET;
 using Relic.Engine;
+using System;
+using System.Numerics;
 
 namespace Relic.Editor
 {
@@ -16,6 +12,8 @@ namespace Relic.Editor
 
         public override void OnGui()
         {
+            if(Window.instance.selectedGameObject is null) return;
+
             InputText("##name", ref Window.instance.selectedGameObject.name, 10_000);
             SameLine(220);
             Label("enabled ");

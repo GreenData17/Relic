@@ -15,46 +15,73 @@ namespace Relic.Editor
 {
     public class GuiFileExplorer : Gui
     {
-        private string _mainFolder;
-        private string _MainPath;
-
-
+        // Folder/Files Specific Variables
         public string currentFolder { get { return _currentFolder;  }
             set { _currentFolder = value; DirectoryChanged(); }
         }
         private string _currentFolder;
 
-        public List<FolderInfo> folders = new List<FolderInfo>();
-        public List<DataInfo> files = new List<DataInfo>();
+        // Paths
+        private string _mainFolder;
+        private string _MainPath;
 
-        // Icons
-        public Texture normalFolder;
-        public Texture assetFolder;
-        public Texture artFolder;
-        public Texture scriptsFolder;
-        public Texture pluginsFolder;
-        public Texture musicFolder;
-        public Texture fontsFolder;
-        public Texture tempFolder;
-        public Texture buildFolder;
-        public Texture settingsFolder;
-        public Texture sceneFolder;
+        // Lists
+        private List<FolderInfo> folders = new List<FolderInfo>();
+        private List<DataInfo> files = new List<DataInfo>();
 
-        public Texture normalFile;
-        public Texture tempFile;
-        public Texture sceneFile;
-        public Texture textFile;
-        public Texture artFile;
-        public Texture scriptFile;
-        public Texture musicFile;
-        public Texture settingFile;
+        // Events
+        public EventHandler OnDirectoryChanged;
+        private class DirectoryEventArgs : EventArgs
+        {
+            public string previousPath = null;
+            public string currentPath;
+        }
+        private void DirectoryChangedEvent(string currentPath)
+        {
+            EventHandler handler = OnDirectoryChanged;
+            var args = new DirectoryEventArgs()
+            {
+                currentPath = currentPath,
+            };
+
+            try
+            {
+                args.previousPath = new DirectoryInfo(currentPath).Parent.FullName;
+            }
+            catch{Debug.LogError("[DirectoryChangedEvent] Failed to Read Previous path!");}
+            handler?.Invoke(this, args);
+        }
 
 
+
+        // Gui Specific Variables
         private bool bigIcons;
+        private bool selected;
+
+        // Folder Icons
+        private Texture _normalFolder;
+        private Texture _assetFolder;
+        private Texture _artFolder;
+        private Texture _scriptsFolder;
+        private Texture _pluginsFolder;
+        private Texture _musicFolder;
+        private Texture _fontsFolder;
+        private Texture _tempFolder;
+        private Texture _buildFolder;
+        private Texture _settingsFolder;
+        private Texture _sceneFolder;
+        
+        // File Icons
+        private Texture _normalFile;
+        private Texture _tempFile;
+        private Texture _sceneFile;
+        private Texture _textFile;
+        private Texture _artFile;
+        private Texture _scriptFile;
+        private Texture _musicFile;
+        private Texture _settingFile;
 
         public GuiFileExplorer() : base("File Explorer") { Start(); DirectoryChanged(); }
-
-        private bool selected;
 
         public void Start()
         {
@@ -62,70 +89,27 @@ namespace Relic.Editor
 
             _mainFolder = "/" + info.Name;
             _MainPath = Program.projectFolder;
-
-            Assembly myAssembly = Assembly.GetExecutingAssembly();
-            Stream textureStream;
             
+            _normalFolder   = Texture.LoadFromResource("Relic.InternalImages.folder.png");
+            _assetFolder    = Texture.LoadFromResource("Relic.InternalImages.folder-Assets.png");
+            _artFolder      = Texture.LoadFromResource("Relic.InternalImages.folder-Art.png");
+            _scriptsFolder  = Texture.LoadFromResource("Relic.InternalImages.folder-Scripts.png");
+            _pluginsFolder  = Texture.LoadFromResource("Relic.InternalImages.folder-Plugins.png");
+            _musicFolder    = Texture.LoadFromResource("Relic.InternalImages.folder-Music.png");
+            _buildFolder    = Texture.LoadFromResource("Relic.InternalImages.folder-Builds.png");
+            _settingsFolder = Texture.LoadFromResource("Relic.InternalImages.folder-Settings.png");
+            _fontsFolder    = Texture.LoadFromResource("Relic.InternalImages.folder-Fonts.png");
+            _tempFolder     = Texture.LoadFromResource("Relic.InternalImages.folder-Temp.png");
+            _sceneFolder    = Texture.LoadFromResource("Relic.InternalImages.folder-Scenes.png");
 
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder.png");
-            normalFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Assets.png");
-            assetFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Art.png");
-            artFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-            
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Scripts.png");
-            scriptsFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-            
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Plugins.png");
-            pluginsFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Music.png");
-            musicFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Builds.png");
-            buildFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Settings.png");
-            settingsFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Fonts.png");
-            fontsFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Temp.png");
-            tempFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.folder-Scenes.png");
-            sceneFolder = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file.png");
-            normalFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Temp.png");
-            tempFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Scene.png");
-            sceneFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Text.png");
-            textFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Art.png");
-            artFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Script.png");
-            scriptFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Music.png");
-            musicFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
-            textureStream = myAssembly.GetManifestResourceStream("Relic.InternalImages.file-Setting.png");
-            settingFile = Texture.LoadFromBitmap(new Bitmap(textureStream));
-
+            _normalFile     = Texture.LoadFromResource("Relic.InternalImages.file.png");
+            _tempFile       = Texture.LoadFromResource("Relic.InternalImages.file-Temp.png");
+            _sceneFile      = Texture.LoadFromResource("Relic.InternalImages.file-Scene.png");
+            _textFile       = Texture.LoadFromResource("Relic.InternalImages.file-Text.png");
+            _artFile        = Texture.LoadFromResource("Relic.InternalImages.file-Art.png");
+            _scriptFile     = Texture.LoadFromResource("Relic.InternalImages.file-Script.png");
+            _musicFile      = Texture.LoadFromResource("Relic.InternalImages.file-Music.png");
+            _settingFile    = Texture.LoadFromResource("Relic.InternalImages.file-Setting.png");
 
             if (!Directory.Exists(_MainPath + "/Assets")) Directory.CreateDirectory(_MainPath + "/Assets");
         }
@@ -161,8 +145,6 @@ namespace Relic.Editor
             {
                 if (folderInfo.open) currentFolder += $"/{folderInfo.folderName}";
             }
-
-
         }
 
         public void DirectoryChanged()
@@ -185,6 +167,8 @@ namespace Relic.Editor
 
                 files.Add(new DataInfo() { fileName = info.Name });
             }
+
+            DirectoryChangedEvent(_MainPath + currentFolder);
         }
 
         private void DrawBigIcons()
@@ -240,8 +224,6 @@ namespace Relic.Editor
                 FileInfo info = new FileInfo(_MainPath + currentFolder + file);
 
                 ImGui.BeginGroup();
-
-                //Button("##Folder", new Vector2(GetContentRegionAvail().X, 20));
                 if (Selectable("##Folder", ref selected,
                         ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
                         new System.Numerics.Vector2(100))) if (ImGui.IsMouseDoubleClicked(0))
@@ -277,19 +259,16 @@ namespace Relic.Editor
             foreach (var directory in Directory.GetDirectories(_MainPath + currentFolder))
             {
                 DirectoryInfo info = new DirectoryInfo(directory);
-
-                //Button("##Folder", new Vector2(GetContentRegionAvail().X, 20));
-                if (Selectable("##Folder", ref selected,
-                        ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
-                        new System.Numerics.Vector2(GetContentRegionAvail().X, 20))) if (ImGui.IsMouseDoubleClicked(0))
+                
+                if (Selectable("##Folder", ref selected,ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,new System.Numerics.Vector2(GetContentRegionAvail().X, 20))) if (ImGui.IsMouseDoubleClicked(0))
                 {
                     foreach (var folderInfo in folders)
                     {
                         if (folderInfo.folderName == info.Name) folderInfo.open = true;
                     }
                 }
-                SameLine(15);
 
+                SameLine(15);
                 SelectFolderImage(info.Name, 20);
 
                 SameLine(40);
@@ -299,19 +278,16 @@ namespace Relic.Editor
             foreach (var file in Directory.GetFiles(_MainPath + currentFolder))
             {
                 FileInfo info = new FileInfo(_MainPath + currentFolder + "/" + file);
-
-                //Button("##Folder", new Vector2(GetContentRegionAvail().X, 20));
-                if (Selectable("##Folder", ref selected,
-                        ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
-                        new System.Numerics.Vector2(GetContentRegionAvail().X, 20))) if (ImGui.IsMouseDoubleClicked(0))
+                
+                if (Selectable("##Folder", ref selected, ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,new System.Numerics.Vector2(GetContentRegionAvail().X, 20))) if (ImGui.IsMouseDoubleClicked(0))
                 {
                     foreach (var fileInfo in files)
                     {
                         if (fileInfo.fileName == info.Name) fileInfo.open = true;
                     }
                 }
-                SameLine(15);
 
+                SameLine(15);
                 SelectFileImage(info.Extension, 20);
 
                 SameLine(40);
@@ -324,40 +300,40 @@ namespace Relic.Editor
             switch (name.ToLower())
             {
                 case "assets":
-                    DrawIcon(assetFolder, size);
+                    DrawIcon(_assetFolder, size);
                     break;
                 case "art":
                 case "graphics":
-                    DrawIcon(artFolder, size);
+                    DrawIcon(_artFolder, size);
                     break;
                 case "scripts":
                 case "code":
-                    DrawIcon(scriptsFolder, size);
+                    DrawIcon(_scriptsFolder, size);
                     break;
                 case "music":
                 case "sounds":
-                    DrawIcon(musicFolder, size);
+                    DrawIcon(_musicFolder, size);
                     break;
                 case "builds":
-                    DrawIcon(buildFolder, size);
+                    DrawIcon(_buildFolder, size);
                     break;
                 case "fonts":
-                    DrawIcon(fontsFolder, size);
+                    DrawIcon(_fontsFolder, size);
                     break;
                 case "temp":
-                    DrawIcon(tempFolder, size);
+                    DrawIcon(_tempFolder, size);
                     break;
                 case "scenes":
-                    DrawIcon(sceneFolder, size);
+                    DrawIcon(_sceneFolder, size);
                     break;
                 case "plugins":
-                    DrawIcon(pluginsFolder, size);
+                    DrawIcon(_pluginsFolder, size);
                     break;
-                case "project settings":
-                    DrawIcon(settingsFolder, size);
+                case "settings":
+                    DrawIcon(_settingsFolder, size);
                     break;
                 default:
-                    DrawIcon(normalFolder, size);
+                    DrawIcon(_normalFolder, size);
                     break;
             }
         }
@@ -370,29 +346,29 @@ namespace Relic.Editor
                 case ".jpg":
                 case ".bmp":
                 case ".png":
-                    DrawIcon(artFile, size);
+                    DrawIcon(_artFile, size);
                     break;
                 case ".cs":
-                    DrawIcon(scriptFile, size);
+                    DrawIcon(_scriptFile, size);
                     break;
                 case ".wav":
                 case ".mp3":
-                    DrawIcon(musicFile, size);
+                    DrawIcon(_musicFile, size);
                     break;
                 case ".txt":
-                    DrawIcon(textFile, size);
+                    DrawIcon(_textFile, size);
                     break;
                 case ".project":
-                    DrawIcon(settingFile, size);
+                    DrawIcon(_settingFile, size);
                     break;
                 case ".scene":
-                    DrawIcon(sceneFile, size);
+                    DrawIcon(_sceneFile, size);
                     break;
                 case ".temp":
-                    DrawIcon(tempFile, size);
+                    DrawIcon(_tempFile, size);
                     break;
                 default:
-                    DrawIcon(normalFile, size);
+                    DrawIcon(_normalFile, size);
                     break;
             }
         }
@@ -401,8 +377,6 @@ namespace Relic.Editor
         {
             Image((IntPtr)texture.handle, new System.Numerics.Vector2(size, size), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
         }
-
-
 
         public class FolderInfo
         {

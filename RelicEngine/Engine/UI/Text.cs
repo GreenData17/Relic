@@ -66,6 +66,7 @@ namespace Relic.Engine.UI
 
         public override void Update()
         {
+            if (Window.mainCam is null) return;
             if (text != _text)
             {
                 _text = text;
@@ -81,22 +82,22 @@ namespace Relic.Engine.UI
 
             texture.Use(TextureUnit.Texture0);
 
-
             _shader.Use();
 
-            var tempScale = BASE_SCALE * (scale / 100f); // + Window.mainCam.zoom * 10;
+            // Update OpenGL Transform
+            var tempScale = BASE_SCALE * (scale / 100f);
 
             var model = Matrix4.Identity;
-            model = model * Matrix4.CreateScale(size.X * tempScale, size.Y * tempScale, model.ExtractScale().Z);
-            model = model * Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(gameObject.transform.rotation));
-            model = model * Matrix4.CreateTranslation(gameObject.transform.position.X, gameObject.transform.position.Y, 0);
+            model *= Matrix4.CreateScale(size.X * tempScale, size.Y * tempScale, model.ExtractScale().Z);
+            model *= Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(gameObject.transform.rotation));
+            model *= Matrix4.CreateTranslation(gameObject.transform.position.X, gameObject.transform.position.Y, 0);
 
 
             // IMPORTANT: OpenTK's matrix types are transposed from what OpenGL would expect - rows and columns are reversed.
             // They are then transposed properly when passed to the shader. 
             _shader.SetMatrix4("model", model);
-            _shader.SetMatrix4("view", Window.view);
-            _shader.SetMatrix4("projection", Window.projection);
+            _shader.SetMatrix4("view", Window.mainCam.view);
+            _shader.SetMatrix4("projection", Window.mainCam.projection);
 
             GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
         }

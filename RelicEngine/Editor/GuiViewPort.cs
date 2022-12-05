@@ -16,7 +16,7 @@ namespace Relic.Editor
             Begin("Viewport");
             RemoveStyleVar();
 
-            
+            if (Window.mainCam is null) { End(); return; }
             if (Window.instance.viewportSize.X != GetContentRegionAvail().X || Window.instance.viewportSize.Y != GetContentRegionAvail().Y)
             {
                 if(GetContentRegionAvail().X == Window.mainCam.bufferTexture.BufferSize.X) return;
@@ -34,28 +34,10 @@ namespace Relic.Editor
                 SolidLabel("##Space", new Vector2(GetXSpace(), 20), new Vector4(0));
                 SameLine();
             }
-
-            Image((IntPtr)Window.mainCam.bufferTexture.frameBufferName + Window.ImGuiTextureOffset, imageSize, new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
-
             
-            // DrawHomeMadeGuizmo();
+            Image((IntPtr)Window.mainCam.bufferTexture.frameBufferName + 1, imageSize, new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
+
             End();
-        }
-
-        private void DrawHomeMadeGuizmo()
-        {
-            GuizmoSpacing(10);
-            SolidLabel("MainCam?", new Vector2(100, 20), new Vector4(0, 0, 0, .2f));
-        }
-
-        void GuizmoSpacing(float space = 1f)
-        {
-            SameLine(space);
-            if (Window.instance.viewportSize.Y < GetNewBufferY())
-            {
-                SolidLabel("##Space", new Vector2(GetXSpace(), 20), new Vector4(0));
-                SameLine();
-            }
         }
 
         float GetNewBufferX() => (float)Window.mainCam.bufferTexture.BufferSize.X / (float)Window.mainCam.bufferTexture.BufferSize.Y *
@@ -66,8 +48,7 @@ namespace Relic.Editor
 
         void ResizeX() => imageSize = new System.Numerics.Vector2(GetNewBufferX(), GetContentRegionAvail().Y);
         void ResizeY() => imageSize = new System.Numerics.Vector2(GetContentRegionAvail().X, GetNewBufferY());
-
-
+        
         float GetXSpace() => (GetContentRegionAvail().X - GetNewBufferX()) / 2;
     }
 }
