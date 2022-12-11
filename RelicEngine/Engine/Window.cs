@@ -40,9 +40,8 @@ namespace Relic.Engine
         public static OrthographicCamera mainCam;
         public static int loadedTextures;
         public static int loadedGameobjects;
-
-        //  TODO: TEMP
-        public string SceneName = "DefaultScene";
+        
+        public Scene currentScene;
 
 
         // Default Variables
@@ -52,7 +51,7 @@ namespace Relic.Engine
 
         // Lists
         public static List<Gui> gui = new List<Gui>();
-        public static List<GameObject> gameObjects = new List<GameObject>();
+        //public static List<GameObject> gameObjects = new List<GameObject>();
         public static List<MonoBehaviour> scriptsList = new List<MonoBehaviour>();
 
         // GameObject
@@ -92,36 +91,8 @@ namespace Relic.Engine
             SetupGui();
             SetupScriptsList();
 
-            // TODO: all object initialization should happen outside of this call
-
-            var test4 = Instantiate(new GameObject());
-            test4.name = "Main Camera";
-            test4.AddComponent(new Camera());
-
-            var test3 = Instantiate(new GameObject());
-            test3.name = "ProfilPicture";
-            var profile = new Sprite()
-                { texture = Texture.LoadFromResource("Relic.InternalImages.ProfileIcon-transparent.png") };
-            profile.size = new Vector2(1000);
-            test3.AddComponent(profile);
-
-            var test0 = Instantiate(new GameObject());
-            test0.name = "Title Text";
-            test0.transform.position = new Vector2(0, 230);
-            test0.transform.rotation = 15f;
-            var title = new Text() { text = "The Game", fontSize = 130, bold = true, color = Color.White, vColor = new System.Numerics.Vector4(1,1,1,1)};
-            test0.AddComponent(title);
-            title = null;
-
-            var test1 = Instantiate(new GameObject());
-            test1.name = "Start Button";
-            test1.transform.position = new Vector2(0, 0);
-            test1.AddComponent(new Text(){text = "[START]", fontSize = 40});
-
-            var test2 = Instantiate(new GameObject());
-            test2.name = "Exit Button";
-            test2.transform.position = new Vector2(0, -80);
-            test2.AddComponent(new Text() { text = "[EXIT]", fontSize = 40 });
+            // TODO Temp
+            currentScene = new Scene();
         }
 
         //====================
@@ -238,7 +209,6 @@ namespace Relic.Engine
             WindowClearUpdates((float)e.Time);
             ImGuiUpdates();
             ViewportClearUpdates();
-            DrawUpdates();
             SwapBuffers();
         }
 
@@ -308,17 +278,6 @@ namespace Relic.Engine
             GL.Clear(ClearBufferMask.ColorBufferBit);
         }
 
-        private void DrawUpdates()
-        {
-            foreach (var obj in gameObjects)
-            {
-                if (obj.enabled)
-                {
-                    obj.Update();
-                }
-            }
-        }
-
 
 
         // [INDEX] Logic Update
@@ -335,19 +294,6 @@ namespace Relic.Engine
         public static void InstantiateGui(Gui gui)
         {
             Window.gui.Add(gui);
-        }
-
-        public static GameObject Instantiate(GameObject gameObject)
-        {
-            gameObjects.Add(gameObject);
-            loadedGameobjects += 1;
-            return gameObject;
-        }
-
-        public static void Delete(GameObject gameObject)
-        {
-            gameObjects.Remove(gameObject);
-            loadedGameobjects -= 1;
         }
 
 
@@ -374,13 +320,16 @@ namespace Relic.Engine
 
         // [INDEX] Unloading
 
+        public void Quit() => Close();
+
         protected override void OnUnload()
         {
+            SaveCurrentScene();
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
             GL.UseProgram(0);
 
-            foreach (var gameObject in gameObjects)
+            foreach (var gameObject in currentScene.gameObjects)
             {
                 foreach (var component in gameObject.components)
                 {
@@ -393,6 +342,10 @@ namespace Relic.Engine
             base.OnUnload();
         }
 
-        public void Quit() => Close();
+        public void SaveCurrentScene()
+        {
+            SaveManager.CreateDirectory(@"Assets\Scenes");
+            SaveManager.WriteJsonFile<Scene>(currentScene, @"Assets\Scenes", $"{currentScene.name}.scene");
+        }
     }
 }
