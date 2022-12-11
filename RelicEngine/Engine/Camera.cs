@@ -1,18 +1,21 @@
-﻿namespace Relic.Engine
+﻿using Relic.Editor;
+
+namespace Relic.Engine
 {
     public class Camera : MonoBehaviour
     {
-        private Vector2 oldPosition;
+        public bool mainCamera;
+        private Vector2 _oldPosition;
 
         public override void Start()
         {
-            oldPosition = new(gameObject.transform.position.X, gameObject.transform.position.Y);
+            _oldPosition = new(gameObject.transform.position.X, gameObject.transform.position.Y);
         }
 
-        public override void Update()
+        public override void EditorUpdate()
         {
-            if(oldPosition == null) return;
-            if(oldPosition.X == gameObject.transform.position.X && oldPosition.Y == gameObject.transform.position.Y) return;
+            if(_oldPosition == null) return;
+            if(_oldPosition.X == gameObject.transform.position.X && _oldPosition.Y == gameObject.transform.position.Y) return;
 
             var camPos = Window.mainCam.position;
             var objPos = gameObject.transform.position;
@@ -23,7 +26,23 @@
             Window.mainCam.position = new Vector2(Window.instance.ClientSize.X / 2f + objPos.X, Window.instance.ClientSize.Y / 2f + objPos.Y);
             //Debug.Log("Position changed!");
 
-            oldPosition = new(gameObject.transform.position.X, gameObject.transform.position.Y);
+            _oldPosition = new(gameObject.transform.position.X, gameObject.transform.position.Y);
+
+            if (mainCamera) canDelete = !mainCamera;
+        }
+
+        public override void OnGui()
+        {
+            if(mainCamera) return;
+
+            if(Gui.Button("Set as Main Camera", new Vector2(Gui.GetContentRegionAvail().X, 25)))
+            {
+                Camera oldCam = Window.instance.currentScene.mainCamera.GetComponent<Camera>() as Camera;
+                oldCam.mainCamera = false;
+                oldCam = null;
+                Window.instance.currentScene.mainCamera = this.gameObject;
+                mainCamera = true;
+            }
         }
     }
 }

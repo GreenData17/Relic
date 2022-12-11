@@ -14,11 +14,13 @@ namespace Relic.Editor
         ImGuiTreeNodeFlags parentTreeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | 
                                                  ImGuiTreeNodeFlags.SpanFullWidth;
 
-        public GuiSceneHierarchy() : base(Window.instance.SceneName) { customImGuiStart = true;}
+        public GuiSceneHierarchy() : base("Scene") { customImGuiStart = true;}
 
         public override void OnGui()
         {
-            Begin(Window.instance.SceneName, ImGuiWindowFlags.MenuBar);
+            Begin("Scene", ImGuiWindowFlags.MenuBar);
+            Label(Window.instance.currentScene.name);
+            Separator();
 
             if (BeginMenuBar())
             {
@@ -26,17 +28,17 @@ namespace Relic.Editor
                 {
                     if (MenuItem("GameObject"))
                     {
-                        Window.Instantiate(new GameObject());
+                        Window.instance.currentScene.Instantiate(new GameObject());
                     }
                     if (MenuItem("Text"))
                     {
-                        var obj = Window.Instantiate(new GameObject());
+                        var obj = Window.instance.currentScene.Instantiate(new GameObject());
                         obj.name = "New Text";
                         obj.AddComponent(new Text() { text = "New Text" });
                     }
                     if (MenuItem("Sprite"))
                     {
-                        var obj = Window.Instantiate(new GameObject());
+                        var obj = Window.instance.currentScene.Instantiate(new GameObject());
                         obj.name = "New Sprite";
                         obj.AddComponent(new Sprite() { size = new Vector2(100)});
                     }
@@ -50,7 +52,7 @@ namespace Relic.Editor
 
             // TODO: Add child/parent view
             SetStyleVar(ImGuiStyleVar.IndentSpacing, ImGui.GetFontSize() * 1);
-            foreach (GameObject gameObject in Window.gameObjects)
+            foreach (GameObject gameObject in Window.instance.currentScene.gameObjects)
             {
                 if (Window.instance.selectedGameObject == gameObject)
                 {
