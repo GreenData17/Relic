@@ -64,7 +64,7 @@ namespace Relic.Engine.UI
             size = new Vector2(1);
         }
 
-        public override void Update()
+        public override void EditorUpdate()
         {
             if (Window.mainCam is null) return;
             if (text != _text)

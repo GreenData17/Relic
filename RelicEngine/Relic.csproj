@@ -36,7 +36,6 @@
     <None Remove="InternalImages\folder-Settings.png" />
     <None Remove="InternalImages\folder-Temp.png" />
     <None Remove="InternalImages\folder.png" />
-    <None Remove="InternalImages\ProfileIcon-transparent.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -87,7 +86,6 @@
 	  <EmbeddedResource Include="InternalImages\folder-Settings.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Temp.png" />
 	  <EmbeddedResource Include="InternalImages\folder.png" />
-	  <EmbeddedResource Include="InternalImages\ProfileIcon-transparent.png" />
 	  <EmbeddedResource Include="InternalImages\folder-Scripts.png" />
 	</ItemGroup>
 

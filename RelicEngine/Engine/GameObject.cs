@@ -28,17 +28,29 @@ namespace Relic.Engine
             foreach (var components in components)
             {
                 if(components.enabled)
-                    components.Update();
+                    components.EditorUpdate();
             }
         }
 
         public List<MonoBehaviour> SetComponents(List<MonoBehaviour> comp) => components = comp;
         public List<MonoBehaviour> GetComponents() => components;
 
+        public MonoBehaviour GetComponent<T>()
+        {
+            foreach (var component in components)
+            {
+                if (component.GetType() == typeof(T))
+                {
+                    return component;
+                }
+            }
+            return null;
+        }
+
         public void AddComponent(MonoBehaviour component)
         {
             components.Add(component);
-            component.gameObject = this;
+            component.SetParent(this);
             component.Start();
             component.Load();
             component._finishedInit = true;

@@ -1,29 +1,24 @@
-﻿using System;
+﻿using Relic.Editor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using ImGuiNET;
-using Relic.Editor;
+using System.Text.Json.Serialization;
 
 namespace Relic.Engine
 {
     public class MonoBehaviour
     {
-        public object inheritor;
-        public GameObject gameObject;
+        [JsonIgnore]
+        public GameObject gameObject { get; private set; }
 
         public bool enabled { get; private set; }
+        public bool canDelete = true;
         public bool _finishedInit;
 
         public MonoBehaviour()
         {
-            inheritor = this;
             enabled = true;
-            if (inheritor.GetType() == typeof(MonoBehaviour)) Window.instance.Close();
         }
 
         public virtual void Start()
@@ -32,6 +27,12 @@ namespace Relic.Engine
         }
 
         public virtual void Update()
+        {
+
+        }
+
+        // Only use in Editor. like Graphics.
+        public virtual void EditorUpdate()
         {
 
         }
@@ -67,10 +68,15 @@ namespace Relic.Engine
             gameObject.RemoveComponent(this);
         }
 
+        public void SetParent(GameObject parent)
+        {
+            gameObject = parent;
+        }
+
         public Dictionary<string, object> PrintPublicVars()
         {
-            return inheritor.GetType()
-                .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.PutDispProperty).ToDictionary(f => f.Name, f => f.GetValue(inheritor));
+            return GetType()
+                .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.PutDispProperty).ToDictionary(f => f.Name, f => f.GetValue(this));
         }
 
         private void ComponentTitle(string label)
@@ -81,7 +87,7 @@ namespace Relic.Engine
             Gui.SameLine(Gui.GetContentRegionAvail().X - 50);
 
             // TODO: Make it possible to switch between cameras! ex. Button labeled: "Make Main" or "Take Main Camera OwnerShip".
-            if (GetType() != typeof(Camera))
+            if (GetType() != typeof(Camera) && !canDelete)
             if (Gui.SolidButton("Delete", new Vector2(50,20), new Vector4(0.3f, 0.3f, 0.3f, 1.0f)))
             {
                 gameObject.RemoveComponent(this);
@@ -93,7 +99,7 @@ namespace Relic.Engine
 
         public void BeginGui()
         {
-            ComponentTitle(inheritor.GetType().Name);
+            ComponentTitle(GetType().Name);
             OnGui();
         }
     }
