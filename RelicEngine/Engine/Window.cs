@@ -15,6 +15,7 @@ using Debug = Relic.Engine.Debug;
 using ErrorCode = OpenTK.Windowing.GraphicsLibraryFramework.ErrorCode;
 using System.IO;
 using System.Reflection;
+using OpenTK.Windowing.Common.Input;
 
 namespace Relic.Engine
 {
@@ -34,13 +35,14 @@ namespace Relic.Engine
         // Window Variables
         public static Window instance;
         private ImGuiController _controller;
-        public Vector2 viewportSize = new(1024, 768);
 
         // Editor Specific Variables
         public static OrthographicCamera mainCam;
-        public static int loadedTextures;
-        public static int loadedGameobjects;
+        public static Setting setting;
+        public static int loadedTextures;     // TODO: Make a Debug window to show these stats!
+        public static int loadedGameobjects;  //  ↳
         
+        // Game Specific Variables
         public Scene currentScene;
 
 
@@ -50,9 +52,7 @@ namespace Relic.Engine
         public static string executionPath = "";
 
         // Lists
-        public static List<Gui> gui = new List<Gui>();
-        //public static List<GameObject> gameObjects = new List<GameObject>();
-        public static List<MonoBehaviour> scriptsList = new List<MonoBehaviour>();
+        public static List<Gui> gui = new();
 
         // GameObject
         public GameObject selectedGameObject
@@ -89,7 +89,7 @@ namespace Relic.Engine
             SetupDefaultTexture();
             SetupStyles();
             SetupGui();
-            SetupScriptsList();
+            setting = new(); // TODO: Create it while loading the save state
 
             // TODO Temp
             currentScene = new Scene();
@@ -120,7 +120,13 @@ namespace Relic.Engine
                 Close();
             }
 
-            Title = "Relic: OpenGL Version: " + GL.GetString(StringName.Version);
+#if DEBUG
+            string _releaseState = "Debug";
+#elif RELEASE
+            string _releaseState = "Release";
+#endif
+
+            Title = "Relic: OpenGL Version: " + GL.GetString(StringName.Version) + $" -{_releaseState}-";
             _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
             //windowSize = new Vector2(ClientSize.X, ClientSize.Y); windowSize = new Vector2(ClientSize.X, ClientSize.Y);
             WindowState = WindowState.Maximized;
@@ -172,12 +178,6 @@ namespace Relic.Engine
             debWin = new GuiDebuggingWindow();
         }
 
-        private void SetupScriptsList()
-        {
-            scriptsList.Add(new Text());
-            scriptsList.Add(new Sprite());
-        }
-
 
 
         // [INDEX] Resize Update
@@ -209,6 +209,7 @@ namespace Relic.Engine
             WindowClearUpdates((float)e.Time);
             ImGuiUpdates();
             ViewportClearUpdates();
+            try{currentScene.GraphicsUpdate();}catch{}
             SwapBuffers();
         }
 
@@ -285,6 +286,7 @@ namespace Relic.Engine
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             base.OnUpdateFrame(args);
+            try { currentScene.Update(); } catch { }
         }
 
 

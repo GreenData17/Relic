@@ -12,7 +12,7 @@ namespace Relic.Engine
             _oldPosition = new(gameObject.transform.position.X, gameObject.transform.position.Y);
         }
 
-        public override void EditorUpdate()
+        public override void GraphicsUpdate()
         {
             if(_oldPosition == null) return;
             if(_oldPosition.X == gameObject.transform.position.X && _oldPosition.Y == gameObject.transform.position.Y) return;

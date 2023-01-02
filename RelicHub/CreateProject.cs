@@ -51,7 +51,7 @@ namespace RelicHub
         {
             if (!Directory.Exists(path)) {SystemSounds.Hand.Play(); return;}
 
-            string savePath = Application.StartupPath + "/project.json";
+            string savePath = Application.UserAppDataPath + "/project.json";
             if (!File.Exists(savePath)) { File.Create(savePath); }
 
             Form1.ProjectInfo info = new Form1.ProjectInfo(NameText.Text, PathText.Text);

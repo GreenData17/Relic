@@ -41,6 +41,16 @@ namespace Relic.Engine
             }
         }
 
+        public void GraphicsUpdate()
+        {
+            foreach (var gameObject in gameObjects)
+            {
+                if (!gameObject.enabled) return;
+
+                gameObject.GraphicsUpdate();
+            }
+        }
+
         public GameObject Instantiate(GameObject gameObject)
         {
             gameObjects.Add(gameObject);

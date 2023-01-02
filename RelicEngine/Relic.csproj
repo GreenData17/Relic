@@ -90,7 +90,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\ImGui.NET\ImGui.NET.csproj" />
+	  <ProjectReference Include="..\ImGui.NET\ImGui.NET.csproj">
+	    <Private>True</Private>
+	  </ProjectReference>
 	</ItemGroup>
 
   <ItemGroup>

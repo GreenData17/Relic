@@ -72,11 +72,17 @@ namespace RelicHub
             catch { }
 
             string jsonContent = JsonSerializer.Serialize(Form1.instance.projects.ToArray(), new JsonSerializerOptions() { WriteIndented = true, IncludeFields = true });
-            File.WriteAllText($"{Application.StartupPath}/project.json", jsonContent);
+            File.WriteAllText($"{Application.UserAppDataPath}/project.json", jsonContent);
 
             if (info == null) Application.Exit();
 
-            string command = $@"/C {Application.StartupPath}\Engine\Debug\net5.0\Relic.exe {path}";
+#if DEBUG
+            string buildState = "Debug";
+#elif RELEASE
+            string buildState = "Release";
+#endif
+
+            string command = $"/C \"{Application.StartupPath}\\Engine\\{buildState}\\net5.0\\Relic.exe\" {path}";
             System.Diagnostics.Process.Start("CMD.exe", command);
             Application.Exit();
         }

@@ -15,7 +15,7 @@ namespace Relic.Engine.UI
         public float scale = 1f;
 
         private const float BASE_SCALE = 100f;
-        public TextRenderingHint textRenderingHint = TextRenderingHint.AntiAlias;
+        //public TextRenderingHint textRenderingHint = TextRenderingHint.SingleBitPerPixel;
 
         public string fontName = "Consolas";
         public Font font { get => _font; set { _font = value; UpdateText(); } }
@@ -64,7 +64,7 @@ namespace Relic.Engine.UI
             size = new Vector2(1);
         }
 
-        public override void EditorUpdate()
+        public override void Update()
         {
             if (Window.mainCam is null) return;
             if (text != _text)
@@ -77,7 +77,11 @@ namespace Relic.Engine.UI
                 _fontSize = fontSize;
                 font = new Font(fontName, fontSize, FontStyle.Regular);
             }
+        }
 
+        public override void GraphicsUpdate()
+        {
+            if (Window.mainCam is null) return;
             if (!_finishedInit) return;
 
             texture.Use(TextureUnit.Texture0);
@@ -120,6 +124,10 @@ namespace Relic.Engine.UI
             {
                 stringSize = g.MeasureString(text, font);
             }
+
+            TextRenderingHint textRenderingHint;
+            if (Window.setting.antiAliasing) textRenderingHint = TextRenderingHint.AntiAlias;
+            else textRenderingHint = TextRenderingHint.SingleBitPerPixel;
 
             using (var bitmap = new Bitmap(Convert.ToInt32(stringSize.Width), Convert.ToInt32(stringSize.Height), System.Drawing.Imaging.PixelFormat.Format16bppRgb555))
             {
