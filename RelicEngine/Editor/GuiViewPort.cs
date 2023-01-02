@@ -15,6 +15,7 @@ namespace Relic.Editor
         {
             SetStyleVar(ImGuiStyleVar.WindowPadding, System.Numerics.Vector2.Zero);
             Begin("Viewport");
+            DetectHovering();
             RemoveStyleVar();
 
             if (Window.mainCam is null) { End(); return; }

@@ -142,11 +142,11 @@ namespace Relic.Editor
             Label($"{_mainFolder.Replace(@"\","")}:{currentFolder}");
 
             BeginChild("FileViewer");
-            if (!bigIcons) DrawSmallIcons();
-            else DrawBigIcons();
+            if (bigIcons) DrawBigIcons();
+            else DrawSmallIcons();
             EndChild();
 
-            if (ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+            if (ImGui.IsMouseClicked(ImGuiMouseButton.Right) && Window.currentHoveredWindow == windowName)
             {
                 ImGui.OpenPopup("ContextMenu");
             }
