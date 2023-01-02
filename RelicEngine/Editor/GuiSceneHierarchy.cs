@@ -19,6 +19,7 @@ namespace Relic.Editor
         public override void OnGui()
         {
             Begin("Scene", ImGuiWindowFlags.MenuBar);
+            DetectHovering();
             Label(Window.instance.currentScene.name);
             Separator();
 

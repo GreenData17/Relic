@@ -39,8 +39,9 @@ namespace Relic.Engine
         // Editor Specific Variables
         public static OrthographicCamera mainCam;
         public static Setting setting;
-        public static int loadedTextures;     // TODO: Make a Debug window to show these stats!
-        public static int loadedGameobjects;  //  ↳
+        public static string currentHoveredWindow;
+        public static int loadedTextures;
+        public static int loadedGameobjects;
         
         // Game Specific Variables
         public Scene currentScene;

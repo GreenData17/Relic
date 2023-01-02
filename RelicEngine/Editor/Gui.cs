@@ -83,12 +83,23 @@ namespace Relic.Editor
             }
 
             ImGui.Begin(windowName);
+
+            DetectHovering();
+
             OnGui();
             ImGui.End();
         }
 
         public virtual void OnGui()
         {
+        }
+
+        public void DetectHovering()
+        {
+            if (ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows))
+            {
+                Window.currentHoveredWindow = windowName;
+            }
         }
 
         // [INDEX] ImGui Decorations
