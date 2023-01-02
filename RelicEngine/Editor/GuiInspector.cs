@@ -1,14 +1,21 @@
 ﻿using ImGuiNET;
 using Relic.Engine;
+using Relic.Engine.UI;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Relic.Editor
 {
     public class GuiInspector : Gui
     {
+        public static List<MonoBehaviour> scriptsList = new();
 
-        public GuiInspector() : base("Inspector") { }
+        public GuiInspector() : base("Inspector")
+        {
+            scriptsList.Add(new Text());
+            scriptsList.Add(new Sprite());
+        }
 
         public override void OnGui()
         {
@@ -160,7 +167,7 @@ namespace Relic.Editor
 
             if (ImGui.BeginPopup("ScriptMenu"))
             {
-                foreach (var monoBehaviour in Window.scriptsList)
+                foreach (var monoBehaviour in scriptsList)
                 {
                     if(ImGui.Button(monoBehaviour.GetType().Name, new System.Numerics.Vector2(100, 20)))
                     {

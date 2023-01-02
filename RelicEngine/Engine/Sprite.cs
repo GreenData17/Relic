@@ -47,7 +47,7 @@ namespace Relic.Engine
             texture = Texture.LoadFromBitmap(Window.noTextureBitmap);
         }
 
-        public override void EditorUpdate()
+        public override void GraphicsUpdate()
         {
             if (Window.mainCam is null) return;
             if (!_finishedInit) return;

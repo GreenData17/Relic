@@ -6,6 +6,7 @@ namespace Relic.Editor
 {
     public class GuiViewPort : Gui
     {
+        private Vector2 viewportSize = new(1024, 768);
         public System.Numerics.Vector2 imageSize;
 
         public GuiViewPort() : base("ViewPort", true) { }
@@ -17,19 +18,19 @@ namespace Relic.Editor
             RemoveStyleVar();
 
             if (Window.mainCam is null) { End(); return; }
-            if (Window.instance.viewportSize.X != GetContentRegionAvail().X || Window.instance.viewportSize.Y != GetContentRegionAvail().Y)
+            if (viewportSize.X != GetContentRegionAvail().X || viewportSize.Y != GetContentRegionAvail().Y)
             {
                 if(GetContentRegionAvail().X == Window.mainCam.bufferTexture.BufferSize.X) return;
                 if(GetContentRegionAvail().X == Window.mainCam.bufferTexture.BufferSize.Y) return;
 
-                Window.instance.viewportSize = new Vector2(GetContentRegionAvail().X, GetContentRegionAvail().Y);
+                viewportSize = new Vector2(GetContentRegionAvail().X, GetContentRegionAvail().Y);
 
-                if (Window.instance.viewportSize.Y < GetNewBufferY()) ResizeX();
+                if (viewportSize.Y < GetNewBufferY()) ResizeX();
                 else ResizeY();
 
             }
 
-            if (Window.instance.viewportSize.Y < GetNewBufferY())
+            if (viewportSize.Y < GetNewBufferY())
             {
                 SolidLabel("##Space", new Vector2(GetXSpace(), 20), new Vector4(0));
                 SameLine();

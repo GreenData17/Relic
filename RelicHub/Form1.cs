@@ -41,8 +41,9 @@ namespace RelicHub
         public void UpdateList()
         {
             ProjectViewer.Controls.Clear();
-
-            jsonContent = File.ReadAllText(Application.StartupPath + "/project.json");
+            if (!File.Exists(Application.UserAppDataPath + "/project.json")) {File.WriteAllLines(Application.UserAppDataPath + "/project.json", new []{"[","]"});}
+            
+            jsonContent = File.ReadAllText(Application.UserAppDataPath + "/project.json");
             projects = JsonSerializer.Deserialize<List<ProjectInfo>>(jsonContent, new JsonSerializerOptions() { WriteIndented = true, IncludeFields = true });
 
             List<ProjectInfo> info = new List<ProjectInfo>();
@@ -64,7 +65,7 @@ namespace RelicHub
             projects = info;
 
             jsonContent = JsonSerializer.Serialize(projects.ToArray(), new JsonSerializerOptions() { WriteIndented = true, IncludeFields = true });
-            File.WriteAllText($"{Application.StartupPath}/project.json", jsonContent);
+            File.WriteAllText($"{Application.UserAppDataPath}/project.json", jsonContent);
         }
 
         public class ProjectInfo

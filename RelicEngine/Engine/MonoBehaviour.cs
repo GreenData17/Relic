@@ -32,7 +32,7 @@ namespace Relic.Engine
         }
 
         // Only use in Editor. like Graphics.
-        public virtual void EditorUpdate()
+        public virtual void GraphicsUpdate()
         {
 
         }

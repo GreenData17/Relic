@@ -27,8 +27,17 @@ namespace Relic.Engine
         {
             foreach (var components in components)
             {
+                if (components.enabled)
+                    components.Update();
+            }
+        }
+
+        public void GraphicsUpdate()
+        {
+            foreach (var components in components)
+            {
                 if(components.enabled)
-                    components.EditorUpdate();
+                    components.GraphicsUpdate();
             }
         }
 
