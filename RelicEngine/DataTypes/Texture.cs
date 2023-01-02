@@ -90,5 +90,11 @@ namespace Relic.DataTypes
             GL.ActiveTexture(unit);
             GL.BindTexture(TextureTarget.Texture2D, handle);
         }
+
+        public void Dispose()
+        {
+            GL.DeleteTexture(handle);
+            Window.loadedTextures -= 1;
+        }
     }
 }
