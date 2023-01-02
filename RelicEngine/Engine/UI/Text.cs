@@ -117,6 +117,7 @@ namespace Relic.Engine.UI
             else
                 _font = new Font(fontName, _fontSize, FontStyle.Regular);
 
+            texture.Dispose();
             texture = null;
 
             SizeF stringSize;
