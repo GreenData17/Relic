@@ -157,7 +157,7 @@ namespace Relic.Editor
                 if (_hoveredType == hoveredType.File)
                 {
                     Label($"File: {_hoveredName}");
-                    if(MenuItem("Delete")){Debug.LogWarning("Delete not implemented!");}
+                    if(MenuItem("Delete")){ Debug.LogWarning("Delete not implemented!"); }
                     Separator();
                 }
                 
