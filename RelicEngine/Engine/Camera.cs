@@ -20,8 +20,8 @@ namespace Relic.Engine
             var camPos = Window.mainCam.position;
             var objPos = gameObject.transform.position;
 
-            Debug.Log($"camPos X:{camPos.X}|Y:{camPos.Y}");
-            Debug.Log($"objPos X:{objPos.X}|Y:{objPos.Y}");
+            //Debug.Log($"camPos X:{camPos.X}|Y:{camPos.Y}");
+            //Debug.Log($"objPos X:{objPos.X}|Y:{objPos.Y}");
 
             Window.mainCam.position = new Vector2(Window.instance.ClientSize.X / 2f + objPos.X, Window.instance.ClientSize.Y / 2f + objPos.Y);
             //Debug.Log("Position changed!");
@@ -42,7 +42,16 @@ namespace Relic.Engine
                 oldCam = null;
                 Window.instance.currentScene.mainCamera = this.gameObject;
                 mainCamera = true;
+                RefreshPosition();
             }
+        }
+
+        //====================
+
+        public void RefreshPosition()
+        {
+            _oldPosition = new(gameObject.transform.position.X + 0.1f, gameObject.transform.position.Y);
+            _oldPosition = new(gameObject.transform.position.X - 0.1f, gameObject.transform.position.Y);
         }
     }
 }
