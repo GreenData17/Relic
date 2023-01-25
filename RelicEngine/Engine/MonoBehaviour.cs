@@ -85,13 +85,12 @@ namespace Relic.Engine
             Gui.Label(label);
 
             Gui.SameLine(Gui.GetContentRegionAvail().X - 50);
-
-            // TODO: Make it possible to switch between cameras! ex. Button labeled: "Make Main" or "Take Main Camera OwnerShip".
+            
             if (GetType() != typeof(Camera) && !canDelete)
-            if (Gui.SolidButton("Delete", new Vector2(50,20), new Vector4(0.3f, 0.3f, 0.3f, 1.0f)))
-            {
-                gameObject.RemoveComponent(this);
-            }
+                if (Gui.SolidButton("Delete", new Vector2(50,20), new Vector4(0.3f, 0.3f, 0.3f, 1.0f)))
+                {
+                    gameObject.RemoveComponent(this);
+                }
 
 
             Gui.Space(5);
