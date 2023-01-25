@@ -58,6 +58,7 @@ namespace Relic.Editor
             COUNT = 25,
         }
 
+        [Flags]
         public enum ImGuiSelectableFlags
         {
             None = 0,
