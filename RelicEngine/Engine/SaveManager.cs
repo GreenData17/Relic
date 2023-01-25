@@ -15,6 +15,14 @@ namespace Relic.Engine
 
         // [INDEX] File Functions
 
+
+        /// <summary>
+        /// Creates a file.
+        /// Input path without project path.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="path"></param>
+        /// <param name="filenameWithExtention"></param>
         public static void WriteFile(string content, string path, string filenameWithExtention)
         {
             if (!Directory.Exists(GetProjectPath() + path))
@@ -26,6 +34,13 @@ namespace Relic.Engine
             File.WriteAllText(path + @"\" + filenameWithExtention, content);
         }
 
+        /// <summary>
+        /// Creates a file.
+        /// Input path without project path.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="path"></param>
+        /// <param name="filenameWithExtention"></param>
         public static void WriteFile(string[] content, string path, string filenameWithExtention)
         {
             if (!Directory.Exists(GetProjectPath() + path))
@@ -39,6 +54,14 @@ namespace Relic.Engine
 
         // json
 
+        /// <summary>
+        /// creates a file in json format.
+        /// Input path without project path.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="content"></param>
+        /// <param name="path"></param>
+        /// <param name="filenameWithExtention"></param>
         public static void WriteJsonFile<T>(object content, string path, string filenameWithExtention)
         {
             if (!Directory.Exists(GetProjectPath() + path))
@@ -68,6 +91,7 @@ namespace Relic.Engine
         }
 
         // Not useful for the Editor...
+        [Obsolete]
         private static string GetGamePath()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
