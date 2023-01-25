@@ -42,7 +42,13 @@ namespace Relic.Engine
         public static string currentHoveredWindow;
         public static int loadedTextures;
         public static int loadedGameobjects;
-        
+
+        // Special Gui Windows
+        public static bool settingIsOpen;
+        public static GuiSettings guiSettings;
+        public static bool debugMenuIsOpen;
+        private GuiDebuggingWindow debugMenu;
+
         // Game Specific Variables
         public Scene currentScene;
 
@@ -163,10 +169,12 @@ namespace Relic.Engine
         {
             ImGui.StyleColorsDark();
 
-            ImGui.PushStyleColor(ImGuiCol.TitleBgActive, new System.Numerics.Vector4(0f, 0f, 0f, 1f));
-            ImGui.PushStyleColor(ImGuiCol.Tab, new System.Numerics.Vector4(.3f, .3f, .3f, 1f));
+            ImGui.PushStyleColor(ImGuiCol.TitleBgActive , new System.Numerics.Vector4(0f   , 0f   , 0f   , 1f));
+            ImGui.PushStyleColor(ImGuiCol.Tab           , new System.Numerics.Vector4(.3f  , .3f  , .3f  , 1f));
+            ImGui.PushStyleColor(ImGuiCol.FrameBg       , new System.Numerics.Vector4(.26f , .59f , .98f , .4f));
+            ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, new System.Numerics.Vector4(.492f, .725f, 1f   , .6f));
 
-            Debug.LogCustom("Styles Loaded!", "ImGui", new System.Numerics.Vector4(.6f, 0, .5f, 1));
+            Debug.LogCustom("Styles Loaded!", "ImGui ", new System.Numerics.Vector4(.6f, 0, .5f, 1));
         }
 
         private void SetupGui()
@@ -176,7 +184,8 @@ namespace Relic.Engine
             InstantiateGui(new GuiViewPort());
             InstantiateGui(new GuiFileExplorer());
             InstantiateGui(new GuiConsole());
-            debWin = new GuiDebuggingWindow();
+            guiSettings = new GuiSettings();
+            debugMenu = new GuiDebuggingWindow();
         }
 
 
@@ -224,9 +233,8 @@ namespace Relic.Engine
             GL.Clear(ClearBufferMask.ColorBufferBit);
         }
 
-        private bool debugMenu = false;
+        
         private bool imGuiMenu = false;
-        private GuiDebuggingWindow debWin = null;
 
         private void ImGuiUpdates()
         {
@@ -240,26 +248,30 @@ namespace Relic.Engine
                 }
             }
 
-            if(debugMenu) debWin.OnGui();
+            if(debugMenuIsOpen) debugMenu.OnGui();
+            if(settingIsOpen) guiSettings.OnGui();
             if(imGuiMenu) ImGui.ShowDemoWindow();
 
             if (ImGui.BeginMainMenuBar())
             {
                 if (ImGui.BeginMenu("File"))
                 {
+                    if (ImGui.MenuItem("Settings")) settingIsOpen = !settingIsOpen;
+                    if (ImGui.MenuItem("Close")) Close();
 
                     ImGui.EndMenu();
                 }
 
                 if (ImGui.BeginMenu("Edit"))
                 {
+                    if (ImGui.MenuItem("Not Working")) Debug.Log("What did you expect? ༼ つ ◕_◕ ༽つ");
 
                     ImGui.EndMenu();
                 }
 
                 if (ImGui.BeginMenu("Help"))
                 {
-                    if (ImGui.MenuItem("Debug Menu")) debugMenu = !debugMenu;
+                    if (ImGui.MenuItem("Debug Menu")) debugMenuIsOpen = !debugMenuIsOpen;
                     if (ImGui.MenuItem("Imgui Menu")) imGuiMenu = !imGuiMenu;
 
                     ImGui.EndMenu();
@@ -297,6 +309,11 @@ namespace Relic.Engine
         public static void InstantiateGui(Gui gui)
         {
             Window.gui.Add(gui);
+        }
+
+        public static void CloseGui(Gui gui)
+        {
+            Window.gui.Remove(gui);
         }
 
 

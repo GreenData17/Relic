@@ -11,14 +11,14 @@ namespace Relic.Engine
     public class Setting
     {
         // Game Info
-        public string gameName;
-        public string gameVersion;
-        public string companyName;
+        public string gameName    = "new Game";
+        public string gameVersion = "0.0.1";
+        public string CreatorName = "defaultCreator";
 
-        public Image gameIcon;
+        public Image gameIcon     = null;
 
 
         // Graphics
-        public bool antiAliasing;
+        public bool antiAliasing  = false;
     }
 }

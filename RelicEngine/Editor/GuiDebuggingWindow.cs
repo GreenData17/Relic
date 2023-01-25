@@ -4,10 +4,12 @@ namespace Relic.Editor
 {
     internal class GuiDebuggingWindow : Gui
     {
-        public GuiDebuggingWindow() : base("Test") { }
+        public GuiDebuggingWindow() : base("Test", true) { }
         
         public override void OnGui()
         {
+            Begin("Debug", ref Window.debugMenuIsOpen);
+
             float framerate = GetIO().Framerate;
             Label($"Application average {1000.0f / framerate:0.##} ms/frame ({framerate:0.#} FPS)");
             Space();
@@ -16,6 +18,8 @@ namespace Relic.Editor
             Space();
             Label($"Loaded gameObjects: {Window.loadedGameobjects}");
             Label($"Loaded textures:    {Window.loadedTextures}");
+
+            End();
         }
     }
 }
