@@ -13,7 +13,7 @@ namespace Relic.Editor
         // 0 = Game Info
         // 1 = Graphics
         //
-        private int menuSection = 0;
+        private byte _menuSection = 0;
 
         public GuiSettings() : base("Settings", true) { }
 
@@ -23,21 +23,21 @@ namespace Relic.Editor
 
             ImGuiNET.ImGui.BeginChild("menu", new System.Numerics.Vector2(150, GetContentRegionAvail().Y), true);
 
-            if (Button("Game Info", new Vector2(GetContentRegionAvail().X, 20))) menuSection = 0;
-            if (Button("Graphics" , new Vector2(GetContentRegionAvail().X, 20))) menuSection = 1;
+            if (Button("Game Info", new Vector2(GetContentRegionAvail().X, 20))) _menuSection = 0;
+            if (Button("Graphics" , new Vector2(GetContentRegionAvail().X, 20))) _menuSection = 1;
 
             ImGuiNET.ImGui.EndChild();
             SameLine(0, 10);
             ImGuiNET.ImGui.BeginChild("menuContent");
 
-            if (menuSection == 0)
+            if (_menuSection == 0)
             {
                 Title("Game Info");
 
                 TextInput("Game name"   , ref Window.setting.gameName);
                 TextInput("Game version", ref Window.setting.gameVersion);
                 TextInput("Game creator", ref Window.setting.CreatorName);
-            }else if (menuSection == 1)
+            }else if (_menuSection == 1)
             {
                 Title("Graphics");
 
