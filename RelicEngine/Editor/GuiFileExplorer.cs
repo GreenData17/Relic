@@ -180,6 +180,7 @@ namespace Relic.Editor
                         }
                         else { Debug.LogWarning("Please rename \"New Scene.scene\"!"); }
                     }
+                    ImGui.EndMenu();
                 }
 
                 if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
