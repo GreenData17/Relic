@@ -154,17 +154,17 @@ namespace Relic.Editor
 
             if (ImGui.BeginPopupContextWindow("ContextMenu"))
             {
-                if (_hoveredType == hoveredType.File)
+                if (_hoveredType == hoveredType.File || _hoveredType == hoveredType.Folder)
                 {
                     Label($"File: {_hoveredName}");
-                    if(MenuItem("Delete")){ Debug.LogWarning("Delete not implemented!"); }
+                    if(MenuItem("Delete")){ File.Delete($@"{Program.projectFolder}{_currentFolder}\{_hoveredName}"); }
                     Separator();
                 }
                 
                 if (_hoveredType == hoveredType.Folder)
                 {
                     Label($"Folder: {_hoveredName}");
-                    if (MenuItem("Delete")) { Debug.LogWarning("Delete not implemented!"); }
+                    if (MenuItem("Delete")) { Directory.Delete($@"{Program.projectFolder}{_currentFolder}\{_hoveredName}"); }
                     Separator();
                 }
 
@@ -180,14 +180,23 @@ namespace Relic.Editor
                         }
                         else { Debug.LogWarning("Please rename \"New Scene.scene\"!"); }
                     }
+                    if (ImGui.MenuItem("Textfile"))
+                    {
+                        if (!File.Exists($@"{Program.projectFolder}{_currentFolder}\new textfile.txt"))
+                        {
+                            SaveManager.WriteFile("", $@"{_currentFolder}", "new textfile.txt");
+                            // Debug.Log($@"{Program.projectFolder}{_currentFolder}");
+                        }
+                    }
+
                     ImGui.EndMenu();
                 }
 
-                if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-                {
-                    _hoveredType = hoveredType.None;
-                    _hoveredPath = "";
-                }
+                //if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                //{
+                //    _hoveredType = hoveredType.None;
+                //    _hoveredPath = "";
+                //}
 
                 ImGui.EndPopup();
             }
@@ -294,7 +303,7 @@ namespace Relic.Editor
                 FileInfo info = new FileInfo(_MainPath + currentFolder + file);
 
                 ImGui.BeginGroup();
-                if (Selectable("##Folder", ref selected, ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
+                if (Selectable("##File", ref selected, ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
                         new System.Numerics.Vector2(100)))
                 if (ImGui.IsMouseDoubleClicked(0))
                 {
@@ -375,7 +384,7 @@ namespace Relic.Editor
             {
                 FileInfo info = new FileInfo(_MainPath + currentFolder + @"\" + file);
                 
-                if (Selectable("##Folder", ref selected, ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,new System.Numerics.Vector2(GetContentRegionAvail().X, 20))) if (ImGui.IsMouseDoubleClicked(0))
+                if (Selectable("##File", ref selected, ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,new System.Numerics.Vector2(GetContentRegionAvail().X, 20))) if (ImGui.IsMouseDoubleClicked(0))
                 {
                     foreach (var fileInfo in files)
                     {
