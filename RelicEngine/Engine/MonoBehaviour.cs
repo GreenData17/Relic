@@ -37,17 +37,17 @@ namespace Relic.Engine
 
         }
 
+        public virtual void OnGui()
+        {
+
+        }
+
         public virtual void Load()
         {
 
         }
 
         public virtual void Unload()
-        {
-
-        }
-
-        public virtual void OnGui()
         {
 
         }

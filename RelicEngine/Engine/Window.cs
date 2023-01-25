@@ -264,7 +264,7 @@ namespace Relic.Engine
 
                 if (ImGui.BeginMenu("Edit"))
                 {
-                    if (ImGui.MenuItem("Not Working")) Debug.Log("What did you expect? ༼ つ ◕_◕ ༽つ");
+                    if (ImGui.MenuItem("Not Working")) Debug.Log("What did you expect? Õ.õ");
 
                     ImGui.EndMenu();
                 }
@@ -309,11 +309,6 @@ namespace Relic.Engine
         public static void InstantiateGui(Gui gui)
         {
             Window.gui.Add(gui);
-        }
-
-        public static void CloseGui(Gui gui)
-        {
-            Window.gui.Remove(gui);
         }
 
 
