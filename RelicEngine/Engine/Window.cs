@@ -219,7 +219,8 @@ namespace Relic.Engine
             WindowClearUpdates((float)e.Time);
             ImGuiUpdates();
             ViewportClearUpdates();
-            try{currentScene.GraphicsUpdate();}catch{}
+            if(currentScene != null)
+                try{currentScene.GraphicsUpdate();}catch{}
             SwapBuffers();
         }
 
@@ -299,7 +300,8 @@ namespace Relic.Engine
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             base.OnUpdateFrame(args);
-            try { currentScene.Update(); } catch { }
+            if(currentScene != null)
+                try { currentScene.Update(); } catch { }
         }
 
 

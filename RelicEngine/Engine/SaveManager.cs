@@ -52,7 +52,7 @@ namespace Relic.Engine
             File.WriteAllLines(path + @"\" + filenameWithExtention, content);
         }
 
-        // json
+        // == JSON ==
 
         /// <summary>
         /// creates a file in json format.
@@ -72,6 +72,17 @@ namespace Relic.Engine
             
             string jsonContent = JsonSerializer.Serialize((T)content, new JsonSerializerOptions() { WriteIndented = true, IncludeFields = true, MaxDepth = 1000});
             File.WriteAllText(path + @"\" + filenameWithExtention, jsonContent);
+        }
+
+        public static object ReadJsonFile<T>(string path)
+        {
+            if (!File.Exists(GetProjectPath() + path))
+            { Debug.LogError($"[SaveManager] {GetProjectPath() + path} does not exist"); return null; }
+            
+            path = GetProjectPath() + path;
+            var content = File.ReadAllText(path);
+
+            return JsonSerializer.Deserialize(content, typeof(T), new JsonSerializerOptions() { WriteIndented = true, IncludeFields = true, MaxDepth = 1000 });
         }
 
         // [INDEX] Directory Functions

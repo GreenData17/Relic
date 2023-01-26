@@ -1,9 +1,12 @@
-﻿using Relic.Editor;
+﻿using System;
+using Relic.Editor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using System.Text.Json;
+
 
 namespace Relic.Engine
 {
@@ -12,6 +15,7 @@ namespace Relic.Engine
         [JsonIgnore]
         public GameObject gameObject { get; private set; }
 
+        public string type;
         public bool enabled { get; private set; }
         public bool canDelete = true;
         public bool _finishedInit;
@@ -19,6 +23,7 @@ namespace Relic.Engine
         public MonoBehaviour()
         {
             enabled = true;
+            type = GetType().Name;
         }
 
         public virtual void Start()

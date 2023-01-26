@@ -12,7 +12,30 @@ namespace Relic.Engine
         public GameObject mainCamera;
         public List<GameObject> gameObjects = new List<GameObject>();
 
-        public Scene()
+        public Scene() => setup();
+
+        public Scene(Scene scene)
+        {
+            name = scene.name;
+            foreach (var gameObject in scene.gameObjects)
+            {
+                var obj = Instantiate(gameObject);
+
+                foreach (dynamic component in obj.components)
+                {
+                    try
+                    {
+                        if (component.mainCamera)
+                            mainCamera = obj;
+                    }
+                    catch { }
+                }
+
+                gameObjects.Add(obj);
+            }
+        }
+
+        private void setup()
         {
             var camObj = Instantiate(new GameObject());
             camObj.name = "Main Camera";

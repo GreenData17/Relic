@@ -20,8 +20,14 @@ namespace Relic.Editor
         {
             Begin("Scene", ImGuiWindowFlags.MenuBar);
             DetectHovering();
-            Label(Window.instance.currentScene.name);
+
+            Label(Window.instance.currentScene == null ? "No Scene Open" : Window.instance.currentScene.name);
             Separator();
+
+            if (Window.instance.currentScene == null)
+            {
+                return;
+            }
 
             if (BeginMenuBar())
             {
@@ -47,10 +53,14 @@ namespace Relic.Editor
                     EndMenu();
                 }
 
+                if (MenuItem("Save"))
+                {
+                    SaveManager.WriteJsonFile<Scene>(Window.instance.currentScene, @"Assets\Scenes", "default.scene");
+                }
+
                 EndMenuBar();
             }
-
-
+            
             // TODO: Add child/parent view
             SetStyleVar(ImGuiStyleVar.IndentSpacing, ImGui.GetFontSize() * 1);
             foreach (GameObject gameObject in Window.instance.currentScene.gameObjects)
