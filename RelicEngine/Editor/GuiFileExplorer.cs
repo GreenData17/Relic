@@ -1,46 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using ImGuiNET;
 using Relic.DataTypes;
 using Relic.Engine;
-using static Relic.Editor.GuiFileExplorer;
+using Debug = Relic.Engine.Debug;
 
 namespace Relic.Editor
 {
     public class GuiFileExplorer : Gui
     {
         // Folder/Files Specific Variables
-        public string currentFolder { get { return _currentFolder;  }
+        public string currentFolder { get => _currentFolder;
             set { _currentFolder = value; DirectoryChanged(); }
         }
         private string _currentFolder;
 
         // Paths
         private string _mainFolder;
-        private string _MainPath;
+        private string _mainPath;
 
         // Highlighted
-        private enum hoveredType{ None, Folder, File }
-        private hoveredType _hoveredType;
+        private enum HoveredType{ Folder, File }
+        private HoveredType _hoveredType;
         private string _hoveredName;
-        private string _hoveredPath;
 
         // Lists
-        private List<FolderInfo> folders = new List<FolderInfo>();
-        private List<DataInfo> files = new List<DataInfo>();
+        private List<FolderInfo> _folders = new();
+        private List<DataInfo> _files = new();
 
         // Events
         public EventHandler OnDirectoryChanged;
         private class DirectoryEventArgs : EventArgs
         {
-            public string previousPath = null;
+            // ReSharper disable once NotAccessedField.Local
+            public string previousPath;
+            // ReSharper disable once NotAccessedField.Local
             public string currentPath;
         }
         private void DirectoryChangedEvent(string currentPath)
@@ -53,7 +49,7 @@ namespace Relic.Editor
 
             try
             {
-                args.previousPath = new DirectoryInfo(currentPath).Parent.FullName;
+                args.previousPath = new DirectoryInfo(currentPath).Parent!.FullName;
             }
             catch{Debug.LogError("[DirectoryChangedEvent] Failed to Read Previous path!");}
             handler?.Invoke(this, args);
@@ -62,8 +58,8 @@ namespace Relic.Editor
 
 
         // Gui Specific Variables
-        private bool bigIcons;
-        private bool selected;
+        private bool _bigIcons;
+        private bool _selected;
 
         // Folder Icons
         private Texture _normalFolder;
@@ -95,7 +91,7 @@ namespace Relic.Editor
             DirectoryInfo info = new DirectoryInfo(Program.projectFolder);
 
             _mainFolder = @"\" + info.Name;
-            _MainPath = Program.projectFolder;
+            _mainPath = Program.projectFolder;
             
             _normalFolder   = Texture.LoadFromResource("Relic.InternalImages.folder.png");
             _assetFolder    = Texture.LoadFromResource("Relic.InternalImages.folder-Assets.png");
@@ -118,7 +114,7 @@ namespace Relic.Editor
             _musicFile      = Texture.LoadFromResource("Relic.InternalImages.file-Music.png");
             _settingFile    = Texture.LoadFromResource("Relic.InternalImages.file-Setting.png");
 
-            if (!Directory.Exists(_MainPath + @"\Assets")) Directory.CreateDirectory(_MainPath + @"\Assets");
+            if (!Directory.Exists(_mainPath + @"\Assets")) Directory.CreateDirectory(_mainPath + @"\Assets");
         }
 
         public override void OnGui()
@@ -129,20 +125,23 @@ namespace Relic.Editor
             {
                 if(string.IsNullOrEmpty(currentFolder)) return;
 
-                DirectoryInfo info = new DirectoryInfo(_MainPath + currentFolder);
-                string newDir = info.Parent.FullName.Remove(0, _MainPath.Length);
-                currentFolder = newDir;
+                if (Directory.Exists(_mainPath + currentFolder))
+                {
+                    DirectoryInfo info = new DirectoryInfo(_mainPath + currentFolder);
+                    string newDir = info.Parent!.FullName.Remove(0, _mainPath.Length);
+                    currentFolder = newDir;
+                }
             }
 
             SameLine(0, 10);
-            CheckBox("Big Icons", ref bigIcons);
+            CheckBox("Big Icons", ref _bigIcons);
 
             Separator();
 
             Label($"{_mainFolder.Replace(@"\","")}:{currentFolder}");
 
             BeginChild("FileViewer");
-            if (bigIcons) DrawBigIcons();
+            if (_bigIcons) DrawBigIcons();
             else DrawSmallIcons();
             EndChild();
 
@@ -151,22 +150,43 @@ namespace Relic.Editor
                 ImGui.OpenPopup("ContextMenu");
             }
             
+            // == Menu Item's you can only select if right clicking a File or Folder ==
 
             if (ImGui.BeginPopupContextWindow("ContextMenu"))
             {
-                if (_hoveredType == hoveredType.File || _hoveredType == hoveredType.Folder)
+                if (_hoveredType == HoveredType.File || _hoveredType == HoveredType.Folder)
                 {
-                    Label($"File: {_hoveredName}");
-                    if(MenuItem("Delete")){ File.Delete($@"{Program.projectFolder}{_currentFolder}\{_hoveredName}"); }
+                    string displayType = _hoveredType == HoveredType.File ? "File" : "Folder";
+                    Label($"{displayType}: {_hoveredName}");
+
+
+                    if (MenuItem("Delete"))
+                    {
+                        if(_hoveredType == HoveredType.File) 
+                            File.Delete($@"{Program.projectFolder}{_currentFolder}\{_hoveredName}");
+                        else
+                            Directory.Delete($@"{Program.projectFolder}{_currentFolder}\{_hoveredName}");
+                    }
+
+
+
                     Separator();
                 }
-                
-                if (_hoveredType == hoveredType.Folder)
+
+                // == Menu Item's always available ==
+
+                if (MenuItem("Reveal in Explorer"))
                 {
-                    Label($"Folder: {_hoveredName}");
-                    if (MenuItem("Delete")) { Directory.Delete($@"{Program.projectFolder}{_currentFolder}\{_hoveredName}"); }
-                    Separator();
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        Arguments = $@"{Program.projectFolder}{_currentFolder}",
+                        FileName = "explorer.exe",
+                    };
+
+                    Process.Start(startInfo);
                 }
+
+                // == "New" Menu ==
 
                 if (ImGui.BeginMenu("New"))
                 {
@@ -175,7 +195,7 @@ namespace Relic.Editor
                         if (!File.Exists(@$"{Program.projectFolder}\Assets\Scenes\New Scene.scene"))
                         {
                             SaveManager.CreateDirectory(@"Assets\Scenes");
-                            SaveManager.WriteJsonFile<Scene>(new Scene(), @"Assets\Scenes", $"New Scene.scene");
+                            SaveManager.WriteJsonFile<Scene>(new Scene(), @"Assets\Scenes", "New Scene.scene");
                             ImGui.CloseCurrentPopup();
                         }
                         else { Debug.LogWarning("Please rename \"New Scene.scene\"!"); }
@@ -185,24 +205,17 @@ namespace Relic.Editor
                         if (!File.Exists($@"{Program.projectFolder}{_currentFolder}\new textfile.txt"))
                         {
                             SaveManager.WriteFile("", $@"{_currentFolder}", "new textfile.txt");
-                            // Debug.Log($@"{Program.projectFolder}{_currentFolder}");
                         }
                     }
 
                     ImGui.EndMenu();
                 }
 
-                //if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-                //{
-                //    _hoveredType = hoveredType.None;
-                //    _hoveredPath = "";
-                //}
-
                 ImGui.EndPopup();
             }
 
 
-            foreach (var folderInfo in folders)
+            foreach (var folderInfo in _folders)
             {
                 if (folderInfo.open) currentFolder += @$"\{folderInfo.folderName}";
             }
@@ -210,34 +223,133 @@ namespace Relic.Editor
 
         public void DirectoryChanged()
         {
-            folders = new List<FolderInfo>();
+            _folders = new List<FolderInfo>();
 
-            foreach (var directory in Directory.GetDirectories(_MainPath + currentFolder))
+            foreach (var directory in Directory.GetDirectories(_mainPath + currentFolder))
             {
                 DirectoryInfo info = new DirectoryInfo(directory);
 
-                folders.Add(new FolderInfo() { folderName = info.Name});
+                _folders.Add(new FolderInfo() { folderName = info.Name});
             }
 
 
-            files = new List<DataInfo>();
+            _files = new List<DataInfo>();
 
-            foreach (var file in Directory.GetFiles(_MainPath + currentFolder))
+            foreach (var file in Directory.GetFiles(_mainPath + currentFolder))
             {
-                FileInfo info = new FileInfo(_MainPath + currentFolder + file);
+                FileInfo info = new FileInfo(_mainPath + currentFolder + file);
 
-                files.Add(new DataInfo() { fileName = info.Name });
+                _files.Add(new DataInfo() { fileName = info.Name });
             }
 
-            DirectoryChangedEvent(_MainPath + currentFolder);
+            DirectoryChangedEvent(_mainPath + currentFolder);
         }
+
+
+        private void DrawSelectable(System.Numerics.Vector2 size, DirectoryInfo info)
+        {
+            if (Selectable("##Folder", ref _selected, ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick, size))
+            {
+                if (ImGui.IsMouseDoubleClicked(0))
+                {
+                    foreach (var folderInfo in _folders)
+                    {
+                        if (folderInfo.folderName == info.Name) folderInfo.open = true;
+                    }
+                }
+            }
+        }
+        private void DrawSelectable(System.Numerics.Vector2 size, FileInfo info)
+        {
+            if (Selectable("##File", ref _selected, ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick, size))
+            {
+                if (ImGui.IsMouseDoubleClicked(0))
+                {
+                    foreach (var fileInfo in _files)
+                    {
+                        if (fileInfo.fileName == info.Name) fileInfo.open = true;
+                    }
+
+                    if (info.Extension == ".scene")
+                    {
+                        Scene scene = (Scene)SaveManager.ReadJsonFile<Scene>("Assets\\Scenes\\" + info.Name);
+                        Window.instance.currentScene = scene;
+                    }
+                }
+            }
+        }
+
+        private void IsItemHovered(DirectoryInfo info)
+        {
+            if (ImGui.IsItemHovered())
+            {
+                _hoveredType = HoveredType.Folder;
+
+                foreach (var folderInfo in _folders)
+                {
+                    if (folderInfo.folderName == info.Name)
+                    {
+                        //_hoveredPath = _MainPath + currentFolder + @"\" + folderInfo.folderName;
+                        _hoveredName = folderInfo.folderName;
+                    }
+                }
+            }
+        }
+        private void IsItemHovered(FileInfo info)
+        {
+            if (ImGui.IsItemHovered())
+            {
+                _hoveredType = HoveredType.File;
+
+                foreach (var fileInfo in _files)
+                {
+                    if (fileInfo.fileName == info.Name)
+                    {
+                        //_hoveredPath = _MainPath + currentFolder + @"\" + fileInfo.fileName;
+                        _hoveredName = fileInfo.fileName;
+                    }
+                }
+            }
+        }
+
+        private static string MaxStringLength(int length, DirectoryInfo info)
+        {
+            string folderName = info.Name;
+            if (info.Name.Length > length)
+            {
+                folderName = info.Name.Remove(length, info.Name.Length - length);
+                folderName += "...";
+            }
+            return folderName;
+        }
+        private static string MaxStringLength(int length, FileInfo info)
+        {
+            string fileName = info.Name;
+            if (info.Name.Length > length)
+            {
+                fileName = info.Name.Remove(length, info.Name.Length - length);
+                fileName += "...";
+            }
+            return fileName;
+        }
+
+        private bool IgnoreFiles(FileInfo info)
+        {
+            if (info.Extension == ".project")
+            {
+                return true;
+            }
+
+            return false;
+        }
+
 
         private void DrawBigIcons()
         {
             int drawnIcons = 0;
             int maxAmountIcons = (int)MathF.Floor(GetContentRegionAvail().X / 100);
 
-            foreach (var directory in Directory.GetDirectories(_MainPath + currentFolder))
+            foreach (var directory in Directory.GetDirectories(_mainPath + currentFolder))
             {
                 if (drawnIcons == maxAmountIcons) drawnIcons = 0;
                 else  SameLine();
@@ -246,48 +358,15 @@ namespace Relic.Editor
 
                 ImGui.BeginGroup();
 
-                //Button("##Folder", new Vector2(GetContentRegionAvail().X, 20));
-                if (Selectable("##Folder", ref selected, ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
-                        new System.Numerics.Vector2(100)))
-                {
-                    if (ImGui.IsMouseDoubleClicked(0))
-                    {
-                        foreach (var folderInfo in folders)
-                        {
-                            if (folderInfo.folderName == info.Name) folderInfo.open = true;
-                        }
-                    }
-                    
-                }
-                if (ImGui.IsItemHovered())
-                {
-                    _hoveredType = hoveredType.Folder;
+                    DrawSelectable(new System.Numerics.Vector2(100), info);
+                    IsItemHovered(info);
+                    SameLine(5);
+                    ImGui.BeginGroup();
 
-                    foreach (var folderInfo in folders)
-                    {
-                        if (folderInfo.folderName == info.Name)
-                        {
-                            _hoveredPath = _MainPath + currentFolder + @"\" + folderInfo.folderName;
-                            _hoveredName = folderInfo.folderName;
-                        }
+                        SelectFolderImage(info.Name, 80);
+                        Label(MaxStringLength(11, info));
 
-                    }
-                }
-
-                SameLine(5);
-
-                ImGui.BeginGroup();
-                SelectFolderImage(info.Name, 80);
-
-                string folderName = info.Name;
-                if (info.Name.Length > 11)
-                {
-                    folderName = info.Name.Remove(11, info.Name.Length - 11);
-                    folderName += "...";
-                }
-
-                Label(folderName);
-                ImGui.EndGroup();
+                    ImGui.EndGroup();
 
                 ImGui.EndGroup();
                 drawnIcons++;
@@ -295,50 +374,26 @@ namespace Relic.Editor
 
 
 
-            foreach (var file in Directory.GetFiles(_MainPath + currentFolder))
+            foreach (var file in Directory.GetFiles(_mainPath + currentFolder))
             {
                 if (drawnIcons == maxAmountIcons) drawnIcons = 0;
                 else SameLine();
+                
+                FileInfo info = new FileInfo(_mainPath + currentFolder + file);
 
-                FileInfo info = new FileInfo(_MainPath + currentFolder + file);
-
-                ImGui.BeginGroup();
-                if (Selectable("##File", ref selected, ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,
-                        new System.Numerics.Vector2(100)))
-                if (ImGui.IsMouseDoubleClicked(0))
-                {
-                    foreach (var fileinfo in files)
-                    {
-                        if (fileinfo.fileName == info.Name) fileinfo.open = true;
-                    }
-                }
-                if (ImGui.IsItemHovered())
-                {
-                    _hoveredType = hoveredType.File;
-
-                    foreach (var fileInfo in files)
-                    {
-                        if (fileInfo.fileName == info.Name)
-                        {
-                            _hoveredPath = _MainPath + currentFolder + @"\" + fileInfo.fileName;
-                            _hoveredName = fileInfo.fileName;
-                        }
-                    }
-                }
-                SameLine(5);
+                if (IgnoreFiles(info)) continue;
 
                 ImGui.BeginGroup();
-                SelectFileImage(info.Extension, 80);
 
-                string folderName = info.Name.Replace(info.Extension, "");
-                if (info.Name.Length > 11)
-                {
-                    folderName = info.Name.Remove(11, info.Name.Length - 11);
-                    folderName += "...";
-                }
+                    DrawSelectable(new System.Numerics.Vector2(100), info);
+                    IsItemHovered(info);
+                    SameLine(5);
+                    ImGui.BeginGroup();
 
-                Label(folderName);
-                ImGui.EndGroup();
+                        SelectFileImage(info.Extension, 80);
+                        Label(MaxStringLength(11, info));
+
+                    ImGui.EndGroup();
 
                 ImGui.EndGroup();
                 drawnIcons++;
@@ -348,30 +403,12 @@ namespace Relic.Editor
 
         private void DrawSmallIcons()
         {
-            foreach (var directory in Directory.GetDirectories(_MainPath + currentFolder))
+            foreach (var directory in Directory.GetDirectories(_mainPath + currentFolder))
             {
                 DirectoryInfo info = new DirectoryInfo(directory);
                 
-                if (Selectable("##Folder", ref selected,ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,new System.Numerics.Vector2(GetContentRegionAvail().X, 20))) if (ImGui.IsMouseDoubleClicked(0))
-                {
-                    foreach (var folderInfo in folders)
-                    {
-                        if (folderInfo.folderName == info.Name) folderInfo.open = true;
-                    }
-                }
-                if (ImGui.IsItemHovered())
-                {
-                    _hoveredType = hoveredType.Folder;
-
-                    foreach (var folderInfo in folders)
-                    {
-                        if (folderInfo.folderName == info.Name)
-                        {
-                            _hoveredPath = _MainPath + currentFolder + @"\" + folderInfo.folderName;
-                            _hoveredName = folderInfo.folderName;
-                        }
-                    }
-                }
+                DrawSelectable(new System.Numerics.Vector2(GetContentRegionAvail().X, 20), info);
+                IsItemHovered(info);
 
                 SameLine(15);
                 SelectFolderImage(info.Name, 20);
@@ -380,30 +417,14 @@ namespace Relic.Editor
                 Label(info.Name);
             }
 
-            foreach (var file in Directory.GetFiles(_MainPath + currentFolder))
+            foreach (var file in Directory.GetFiles(_mainPath + currentFolder))
             {
-                FileInfo info = new FileInfo(_MainPath + currentFolder + @"\" + file);
-                
-                if (Selectable("##File", ref selected, ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick,new System.Numerics.Vector2(GetContentRegionAvail().X, 20))) if (ImGui.IsMouseDoubleClicked(0))
-                {
-                    foreach (var fileInfo in files)
-                    {
-                        if (fileInfo.fileName == info.Name) fileInfo.open = true;
-                    }
-                }
-                if (ImGui.IsItemHovered())
-                {
-                    _hoveredType = hoveredType.File;
+                FileInfo info = new FileInfo(_mainPath + currentFolder + @"\" + file);
 
-                    foreach (var fileInfo in files)
-                    {
-                        if (fileInfo.fileName == info.Name)
-                        {
-                            _hoveredPath = _MainPath + currentFolder + @"\" + fileInfo.fileName;
-                            _hoveredName = fileInfo.fileName;
-                        }
-                    }
-                }
+                if (IgnoreFiles(info)) continue;
+
+                DrawSelectable(new System.Numerics.Vector2(GetContentRegionAvail().X, 20), info);
+                IsItemHovered(info);
 
                 SameLine(15);
                 SelectFileImage(info.Extension, 20);

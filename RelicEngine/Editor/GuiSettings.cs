@@ -20,6 +20,7 @@ namespace Relic.Editor
         public override void OnGui()
         {
             ImGuiNET.ImGui.Begin("Settings", ref Window.settingIsOpen);
+            DetectHovering();
 
             ImGuiNET.ImGui.BeginChild("menu", new System.Numerics.Vector2(150, GetContentRegionAvail().Y), true);
 
