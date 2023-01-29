@@ -1,6 +1,7 @@
 ﻿using Relic.Engine;
 using System;
 using System.Numerics;
+using Relic.DataTypes;
 
 namespace Relic.Editor
 {
@@ -33,7 +34,7 @@ namespace Relic.Editor
 
             if (viewportSize.Y < GetNewBufferY())
             {
-                SolidLabel("##Space", new Vector2(GetXSpace(), 20), new Vector4(0));
+                SolidLabel("##Space", new Vector2(GetXSpace(), 20), new Color(0));
                 SameLine();
             }
             

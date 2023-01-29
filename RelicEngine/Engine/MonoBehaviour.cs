@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Relic.DataTypes;
 
 
 namespace Relic.Engine
@@ -92,7 +93,7 @@ namespace Relic.Engine
             Gui.SameLine(Gui.GetContentRegionAvail().X - 50);
             
             if (GetType() != typeof(Camera) && !canDelete)
-                if (Gui.SolidButton("Delete", new Vector2(50,20), new Vector4(0.3f, 0.3f, 0.3f, 1.0f)))
+                if (Gui.SolidButton("Delete", new Vector2(50,20), new Color(0.3f, 0.3f, 0.3f, 1.0f)))
                 {
                     gameObject.RemoveComponent(this);
                 }

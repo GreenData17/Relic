@@ -4,6 +4,7 @@ using Relic.Engine.UI;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Relic.DataTypes;
 
 namespace Relic.Editor
 {
@@ -32,19 +33,19 @@ namespace Relic.Editor
             Label("Transform");
             Space(5);
 
-            SolidLabel("X", new Vector2(20), new Vector4(0.8f, 0.1f, 0.1f, 1.0f));
+            SolidLabel("X", new Vector2(20), new Color(0.8f, 0.1f, 0.1f, 1.0f));  
             SameLine(32);
             ImGui.PushItemWidth(GetContentRegionAvail().X);
             DragFloat("##posX", ref Window.instance.selectedGameObject.transform.position.X);
             ImGui.PopItemWidth();
 
-            SolidLabel("Y", new Vector2(20), new Vector4(0.1f, 0.8f, 0.1f, 1.0f));
+            SolidLabel("Y", new Vector2(20), new Color(0.1f, 0.8f, 0.1f, 1.0f));
             SameLine(32);
             ImGui.PushItemWidth(GetContentRegionAvail().X);
             DragFloat("##posY", ref Window.instance.selectedGameObject.transform.position.Y);
             ImGui.PopItemWidth();
 
-            SolidLabel("R", new Vector2(20), new Vector4(0.3f, 0.3f, 0.8f, 1.0f));
+            SolidLabel("R", new Vector2(20), new Color(0.3f, 0.3f, 0.8f, 1.0f));
             SameLine(32);
             ImGui.PushItemWidth(GetContentRegionAvail().X);
             DragFloat("##rot", ref Window.instance.selectedGameObject.transform.rotation, format: Window.instance.selectedGameObject.transform.rotation.ToString("0.00") + "°");

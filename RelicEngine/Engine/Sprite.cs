@@ -1,7 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using Relic.DataTypes;
-using System.Drawing;
 
 namespace Relic.Engine
 {
@@ -15,7 +14,7 @@ namespace Relic.Engine
 
         public Texture texture;
         public Texture texture2 = null;
-        public Color overlayColor = Color.White;
+        public Color overlayColor = System.Drawing.Color.White;
 
         #region shader Variables
 
@@ -73,8 +72,8 @@ namespace Relic.Engine
 
             GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
 
-            if(overlayColor == Color.White) return;
-            _shader.SetVector4("overlayColor", Shader.ColorToVector4(Color.White));
+            if(overlayColor == System.Drawing.Color.White) return;
+            _shader.SetVector4("overlayColor", Shader.ColorToVector4(System.Drawing.Color.White));
         }
 
         public override void Load()

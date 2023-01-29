@@ -4,18 +4,13 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Numerics;
 using Relic.DataTypes;
 using Relic.Editor;
-using Relic.Engine.UI;
-using Debug = Relic.Engine.Debug;
-using ErrorCode = OpenTK.Windowing.GraphicsLibraryFramework.ErrorCode;
-using System.IO;
+using System;
+using System.Collections.Generic;
 using System.Reflection;
-using OpenTK.Windowing.Common.Input;
+using Bitmap = System.Drawing.Bitmap;
+using ErrorCode = OpenTK.Windowing.GraphicsLibraryFramework.ErrorCode;
 
 namespace Relic.Engine
 {
@@ -169,12 +164,12 @@ namespace Relic.Engine
         {
             ImGui.StyleColorsDark();
 
-            ImGui.PushStyleColor(ImGuiCol.TitleBgActive , new System.Numerics.Vector4(0f   , 0f   , 0f   , 1f));
-            ImGui.PushStyleColor(ImGuiCol.Tab           , new System.Numerics.Vector4(.3f  , .3f  , .3f  , 1f));
-            ImGui.PushStyleColor(ImGuiCol.FrameBg       , new System.Numerics.Vector4(.26f , .59f , .98f , .4f));
-            ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, new System.Numerics.Vector4(.492f, .725f, 1f   , .6f));
+            ImGui.PushStyleColor(ImGuiCol.TitleBgActive , new Color(0f   , 0f   , 0f   , 1f));
+            ImGui.PushStyleColor(ImGuiCol.Tab           , new Color(.3f  , .3f  , .3f  , 1f));
+            ImGui.PushStyleColor(ImGuiCol.FrameBg       , new Color(.26f , .59f , .98f , .4f));
+            ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, new Color(.492f, .725f, 1f   , .6f));
 
-            Debug.LogCustom("Styles Loaded!", "ImGui ", new System.Numerics.Vector4(.6f, 0, .5f, 1));
+            Debug.LogCustom("Styles Loaded!", "ImGui ", new Color(.6f, 0, .5f, 1));
         }
 
         private void SetupGui()

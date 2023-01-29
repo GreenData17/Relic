@@ -1,5 +1,6 @@
 ﻿using Relic.Engine;
 using System.Numerics;
+using Relic.DataTypes;
 
 namespace Relic.Editor
 {
@@ -30,7 +31,7 @@ namespace Relic.Editor
             {
                 if (Debug.logs[i-1].type == Debug.LogType.Engine && !showEngineLogs) continue;
 
-                SolidLabel(" ", new Vector2(GetWindowSize().X, 20), new Vector4(.2f, .2f, .2f, 1));
+                SolidLabel(" ", new Vector2(GetWindowSize().X, 20), new Color(.2f, .2f, .2f, 1));
                 SameLine(10);
 
                 SetStyleVar(ImGuiStyleVar.FrameRounding, 12);
@@ -45,8 +46,8 @@ namespace Relic.Editor
                     SolidLabel("WARNING", new Vector2(60, 20), Debug.logs[i - 1].color, true);
                 }else if (Debug.logs[i - 1].type == Debug.LogType.Custom)
                 {
-                    Vector4 color = Debug.logs[i - 1].color;
-                    SolidLabel(Debug.logs[i - 1].prefix.ToUpper(), new Vector2(60, 20), color, !(color.X + color.Y + color.Z / 3f < .8f));
+                    Color color = Debug.logs[i - 1].color;
+                    SolidLabel(Debug.logs[i - 1].prefix.ToUpper(), new Vector2(60, 20), color, !(color.r + color.g + color.b / 3f < .8f));
                 }else if (Debug.logs[i - 1].type == Debug.LogType.Engine)
                 {
                     SolidLabel("ENGINE", new Vector2(60, 20), Debug.logs[i - 1].color);
