@@ -149,9 +149,46 @@ namespace Relic.Engine
         {
             gameObjectsDataCollection = SaveManager.ReadJsonFile<List<gameObjectData>>("Assets\\Scenes\\test2.scene") as List<gameObjectData>;
 
-            foreach (var gameObjectData in gameObjectsDataCollection)
+            if(gameObjectsDataCollection == null ) return;
+            gameObjects.Clear();
+
+            foreach (var gameObject in gameObjectsDataCollection)
             {
+                var obj = new GameObject();
+                obj.enabled = gameObject.enabled;
+                obj.name = gameObject.name;
+                obj.tag = gameObject.tag;
+
+                foreach (var component in gameObject.componentData)
+                {
+                    Type type = Type.GetType(component.Key);
+                    if(type == null) continue;
+
+                    var script = Activator.CreateInstance(type);
+                    
+                    foreach (var fieldData in component.Value)
+                    {
+                        FieldInfo fieldInfo = script.GetType().GetField(fieldData.Key);
+                        if(fieldInfo == null) continue;
+                        
+                        try
+                        {
+                            fieldInfo.SetValue(script, Convert.ChangeType(fieldData.Value.ToString(), fieldInfo.FieldType));
+                        }
+                        catch {}
+
+
+                    }
+
+                    obj.AddComponent(script as MonoBehaviour);
+                }
                 
+                Instantiate(obj);
+                var cam = (Camera)obj.GetComponent<Camera>();
+                if (cam != null && cam.mainCamera)
+                {
+                    mainCamera = obj;
+                }
             }
         }
 
