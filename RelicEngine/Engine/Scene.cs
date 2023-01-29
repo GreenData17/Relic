@@ -1,8 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
+using Relic.DataTypes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Relic.Engine
 {
@@ -10,7 +17,14 @@ namespace Relic.Engine
     {
         public string name = "New Scene";
         public GameObject mainCamera;
+
+        [JsonIgnore]
         public List<GameObject> gameObjects = new List<GameObject>();
+        [JsonIgnore]
+        public Dictionary<string, Dictionary<string, object>> variableData = new Dictionary<string, Dictionary<string, object>>();
+
+        //            Gameobject name   comonement name    variable name   \/----variable data
+        public Dictionary<string, Dictionary<string, Dictionary<string, object>>> gameobjectData = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
 
         public Scene() => setup();
 
@@ -29,6 +43,15 @@ namespace Relic.Engine
                             mainCamera = obj;
                     }
                     catch { }
+
+                    foreach (var script in GetAllSubclassesOf(typeof(MonoBehaviour)))
+                    {
+
+                        if (component.GetType() == script)
+                        {
+
+                        }
+                    }
                 }
 
                 gameObjects.Add(obj);
@@ -85,6 +108,11 @@ namespace Relic.Engine
         {
             gameObjects.Remove(gameObject);
             Window.loadedGameobjects -= 1;
+        }
+
+        public static List<Type> GetAllSubclassesOf(Type baseType)
+        {
+            return Assembly.GetAssembly(baseType).GetTypes().Where(type => type.IsSubclassOf(baseType)).ToList();
         }
     }
 }

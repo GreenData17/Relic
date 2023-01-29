@@ -13,10 +13,10 @@ namespace Relic.Engine
         }
 
         // colors
-        private static Color logColor = new Color(1, 1, 1, 1);
-        private static Color warningColor = new Color(1, .8f, 0, 1);
-        private static Color errorColor = new Color(1, 0, 0, 1);
-        private static Color engineColor = new Color(0, .5f, .8f, 1);
+        private static Color logColor     = new Color(1f, 1f  , 1f  );
+        private static Color warningColor = new Color(1f, .8f , 0f  );
+        private static Color errorColor   = new Color(1f, 0f  , 0f  );
+        private static Color engineColor  = new Color(0f, .5f , .8f );
 
         // a list of all logs since last ClearConsole();
         public static List<Messages> logs { get{return _logs;} private set{_logs = value;}}

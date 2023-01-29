@@ -5,10 +5,9 @@
         public float X;
         public float Y;
 
-        public Vector2() { SetVector(0, 0); }
-        public Vector2(float X, float Y) { SetVector(X, Y); }
-        public Vector2(float XY) { SetVector(XY, XY); }
-        private void SetVector(float X, float Y) { this.X = X; this.Y = Y; }
+        public Vector2() { X = 0; Y = 0; }
+        public Vector2(float X, float Y) { this.X = X; this.Y = Y; }
+        public Vector2(float XY) { X = XY; Y = XY; }
 
         // statics
 

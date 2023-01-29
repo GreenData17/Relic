@@ -16,7 +16,7 @@ namespace Relic.Engine
         [JsonIgnore]
         public GameObject gameObject { get; private set; }
 
-        public string type;
+        public string name;
         public bool enabled { get; private set; }
         public bool canDelete = true;
         public bool _finishedInit;
@@ -24,7 +24,7 @@ namespace Relic.Engine
         public MonoBehaviour()
         {
             enabled = true;
-            type = GetType().Name;
+            name = GetType().FullName;
         }
 
         public virtual void Start()

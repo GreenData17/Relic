@@ -31,7 +31,7 @@ namespace Relic.Editor
             {
                 if (Debug.logs[i-1].type == Debug.LogType.Engine && !showEngineLogs) continue;
 
-                SolidLabel(" ", new Vector2(GetWindowSize().X, 20), new Color(.2f, .2f, .2f, 1));
+                SolidLabel(" ", new Vector2(GetWindowSize().X, 20), new Color(.2f, .2f, .2f));
                 SameLine(10);
 
                 SetStyleVar(ImGuiStyleVar.FrameRounding, 12);
