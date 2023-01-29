@@ -55,7 +55,8 @@ namespace Relic.Editor
 
                 if (MenuItem("Save"))
                 {
-                    SaveManager.WriteJsonFile<Scene>(Window.instance.currentScene, @"Assets\Scenes", "default.scene");
+                    // SaveManager.WriteJsonFile<Scene>(Window.instance.currentScene, @"Assets\Scenes", "default.scene");
+                    Window.instance.currentScene.SaveGameobjects();
                 }
 
                 EndMenuBar();

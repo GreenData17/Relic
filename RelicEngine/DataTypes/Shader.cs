@@ -179,10 +179,10 @@ namespace Relic.DataTypes
         public static Vector4 ColorToVector4(Color color)
         {
             var vColor = Vector4.Zero;
-            vColor.X = color.r / 255f;
-            vColor.Y = color.g / 255f;
-            vColor.Z = color.b / 255f;
-            vColor.W = color.a / 255f;
+            vColor.W = color.r;
+            vColor.X = color.g;
+            vColor.Y = color.b;
+            vColor.Z = color.a;
             return vColor;
         }
     }

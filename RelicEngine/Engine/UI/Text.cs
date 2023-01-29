@@ -26,11 +26,13 @@ namespace Relic.Engine.UI
         public bool _bold = false;
         public bool italic { get => _italic; set { _italic = value; UpdateText(); } }
         public bool _italic = false;
+        public float r, g, b = 0;
+        public float a = 1;
         public Relic.DataTypes.Color color = System.Drawing.Color.Black;
-        public System.Numerics.Vector4 vColor = new System.Numerics.Vector4(0, 0, 0, 1);
+        private System.Numerics.Vector4 vColor = new System.Numerics.Vector4(0, 0, 0, 1);
         public string text = "";
         private string _text = "";
-        public Texture texture = null;
+        private Texture texture = null;
 
 
         #region shader Variables
@@ -62,6 +64,8 @@ namespace Relic.Engine.UI
         public override void Start()
         {
             size = new Vector2(1);
+            vColor = new DataTypes.Color(r, g, b, a);
+            color = new DataTypes.Color(r, g, b, a);
         }
 
         public override void Update()
@@ -203,7 +207,11 @@ namespace Relic.Engine.UI
             Gui.SameLine(200);
             if (Gui.Button("Update Color", new Vector2(100, 20)))
             {
-                color = Relic.DataTypes.Color.FromArgb((int)MathF.Floor(vColor.W * 255f), (int)MathF.Floor(vColor.X * 255f), (int)MathF.Floor(vColor.Y * 255f), (int)MathF.Floor(vColor.Z * 255f));
+                color = new Relic.DataTypes.Color(vColor.X, vColor.Y, vColor.Z, vColor.W);
+                a = vColor.W;
+                r = vColor.X;
+                g = vColor.Y;
+                b = vColor.Z;
                 UpdateText();
             }
 

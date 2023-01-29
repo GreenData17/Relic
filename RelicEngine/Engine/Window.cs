@@ -8,6 +8,7 @@ using Relic.DataTypes;
 using Relic.Editor;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Reflection;
 using Bitmap = System.Drawing.Bitmap;
 using ErrorCode = OpenTK.Windowing.GraphicsLibraryFramework.ErrorCode;
@@ -95,6 +96,7 @@ namespace Relic.Engine
 
             // TODO Temp
             currentScene = new Scene();
+            currentScene.loadGameobject();
         }
 
         //====================

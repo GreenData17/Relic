@@ -114,7 +114,7 @@ namespace Relic.Editor
             ImGui.PushStyleColor(ImGuiCol.Button, color);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color);
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, color);
-            if(black) ImGui.PushStyleColor(ImGuiCol.Text, new Color(0,0,0,1));
+            if(black) ImGui.PushStyleColor(ImGuiCol.Text, new Color(0f,0f,0f));
             ImGui.Button(label, vec);
             ImGui.PopStyleColor();
             ImGui.PopStyleColor();
