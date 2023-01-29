@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Relic.DataTypes;
 
 namespace Relic.Engine
 {
@@ -12,10 +13,10 @@ namespace Relic.Engine
         }
 
         // colors
-        private static Vector4 logColor = new Vector4(1, 1, 1, 1);
-        private static Vector4 warningColor = new Vector4(1, .8f, 0, 1);
-        private static Vector4 errorColor = new Vector4(1, 0, 0, 1);
-        private static Vector4 engineColor = new Vector4(0, .5f, .8f, 1);
+        private static Color logColor = new Color(1, 1, 1, 1);
+        private static Color warningColor = new Color(1, .8f, 0, 1);
+        private static Color errorColor = new Color(1, 0, 0, 1);
+        private static Color engineColor = new Color(0, .5f, .8f, 1);
 
         // a list of all logs since last ClearConsole();
         public static List<Messages> logs { get{return _logs;} private set{_logs = value;}}
@@ -26,7 +27,7 @@ namespace Relic.Engine
         public static void LogWarning(string msg) { SendToConsole(msg, "WARN  ", ConsoleColor.Yellow); logs.Add(new Messages(msg, LogType.Warning, warningColor)); }
         public static void LogError(string msg) { SendToConsole(msg, "ERROR ", ConsoleColor.Red); logs.Add(new Messages(msg, LogType.Error, errorColor)); }
         public static void LogEngine(string msg) { SendToConsole(msg, "ENGINE", ConsoleColor.Cyan); logs.Add(new Messages(msg, LogType.Engine, engineColor)); }
-        public static void LogCustom(string msg, string prefix, Vector4 color) { SendToConsole(msg, prefix, ConsoleColor.Cyan); logs.Add(new Messages(msg, LogType.Custom, color, prefix)); }
+        public static void LogCustom(string msg, string prefix, Color color) { SendToConsole(msg, prefix, ConsoleColor.Cyan); logs.Add(new Messages(msg, LogType.Custom, color, prefix)); }
 
         
 
@@ -53,10 +54,10 @@ namespace Relic.Engine
             public string msg;
             public string prefix;
             public LogType type;
-            public Vector4 color;
+            public Color color;
             public DateTime time;
 
-            public Messages(string msg, LogType type, Vector4 color, string prefix = "")
+            public Messages(string msg, LogType type, Color color, string prefix = "")
             {
                 this.msg = msg;
                 this.type = type;

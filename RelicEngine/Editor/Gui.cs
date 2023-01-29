@@ -107,14 +107,14 @@ namespace Relic.Editor
 
         public static void Label(string label) => ImGui.Text(label);
 
-        public static void SolidLabel(string label, Vector2 size, Vector4 color, bool black = false)
+        public static void SolidLabel(string label, Vector2 size, Color color, bool black = false)
         {
-            System.Numerics.Vector2 vec = new System.Numerics.Vector2(size.X, size.Y);
+            Vector2 vec = new Vector2(size.X, size.Y);
 
             ImGui.PushStyleColor(ImGuiCol.Button, color);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color);
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, color);
-            if(black) ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0,0,0,1));
+            if(black) ImGui.PushStyleColor(ImGuiCol.Text, new Color(0,0,0,1));
             ImGui.Button(label, vec);
             ImGui.PopStyleColor();
             ImGui.PopStyleColor();
@@ -122,8 +122,8 @@ namespace Relic.Editor
             if (black) ImGui.PopStyleColor();
         }
 
-        public static void Image(IntPtr ptr, System.Numerics.Vector2 size, System.Numerics.Vector2 uv0,
-            System.Numerics.Vector2 uv1) => ImGui.Image(ptr, size, uv0, uv1);
+        public static void Image(IntPtr ptr, Vector2 size, Vector2 uv0,
+            Vector2 uv1) => ImGui.Image(ptr, size, uv0, uv1);
 
         // [INDEX] ImGui Interactions
 
@@ -132,17 +132,17 @@ namespace Relic.Editor
             if (size is null)
                 size = new Vector2(60, 20);
 
-            System.Numerics.Vector2 vec = new System.Numerics.Vector2(size.X, size.Y);
+            Vector2 vec = new Vector2(size.X, size.Y);
 
             return ImGui.Button(label, vec);
         }
 
-        public static bool SolidButton(string label, Vector2 size, Vector4 color)
+        public static bool SolidButton(string label, Vector2 size, Color color)
         {
             if (size is null)
                 size = new Vector2(60, 20);
 
-            System.Numerics.Vector2 vec = new System.Numerics.Vector2(size.X, size.Y);
+            Vector2 vec = new Vector2(size.X, size.Y);
 
             ImGui.PushStyleColor(ImGuiCol.Button, color);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color);
@@ -152,7 +152,7 @@ namespace Relic.Editor
             return result;
         }
 
-        public static bool Selectable(string label, ref bool selected, ImGuiSelectableFlags flags, System.Numerics.Vector2 size) => 
+        public static bool Selectable(string label, ref bool selected, ImGuiSelectableFlags flags, Vector2 size) => 
             ImGui.Selectable(label, selected, (ImGuiNET.ImGuiSelectableFlags)flags, size);
 
         public static bool ComboBox(string label, ref int currentItem, string[] items)
@@ -217,7 +217,7 @@ namespace Relic.Editor
 
         public static void InputTextMultiline(string label, ref string content, Vector2 size, uint maxLength = UInt32.MaxValue)
         {
-            System.Numerics.Vector2 vec = new System.Numerics.Vector2(size.X, size.Y);
+            Vector2 vec = new Vector2(size.X, size.Y);
 
             ImGui.InputTextMultiline(label, ref content, maxLength, vec);
         }
@@ -228,7 +228,7 @@ namespace Relic.Editor
             ImGui.ColorEdit4(label, ref color, ImGuiColorEditFlags.NoInputs);
         }
 
-        public static void ColorButton(string label, ref Vector4 color, System.Numerics.Vector2 size)
+        public static void ColorButton(string label, ref Vector4 color, Vector2 size)
         {
             if (ImGui.ColorButton(label, color, ImGuiColorEditFlags.NoInputs, size))
             {
@@ -245,35 +245,35 @@ namespace Relic.Editor
         // [INDEX] ImGui Styling
 
         public static void SetStyleVar(ImGuiStyleVar var, float value) => ImGui.PushStyleVar((ImGuiNET.ImGuiStyleVar)var, value);
-        public static void SetStyleVar(ImGuiStyleVar var, System.Numerics.Vector2 value) => ImGui.PushStyleVar((ImGuiNET.ImGuiStyleVar)var, value);
+        public static void SetStyleVar(ImGuiStyleVar var, Vector2 value) => ImGui.PushStyleVar((ImGuiNET.ImGuiStyleVar)var, value);
         public static void RemoveStyleVar() => ImGui.PopStyleVar();
 
-        public static void SetStyleColor(ImGuiCol obj, Vector4 color) => ImGui.PushStyleColor(obj, color);
+        public static void SetStyleColor(ImGuiCol obj, Color color) => ImGui.PushStyleColor(obj, color);
         public static void RemoveStyleColor() => ImGui.PopStyleColor();
 
         public static void SameLine(float offsetFromStart = 0f, float spacing = 0f) => ImGui.SameLine(offsetFromStart, spacing);
         public static void NewLine() => ImGui.NewLine();
 
         public static void Separator() => ImGui.Separator();
-        public static void Space(float height = 10) => ImGui.Dummy(new System.Numerics.Vector2(0f, height));
-        public static System.Numerics.Vector2 GetWindowSize() => ImGui.GetWindowSize();
+        public static void Space(float height = 10) => ImGui.Dummy(new Vector2(0f, height));
+        public static Vector2 GetWindowSize() => ImGui.GetWindowSize();
 
         // [INDEX] ImGui System
 
         // Get
         public static ImGuiIOPtr GetIO() => ImGui.GetIO();
-        public static System.Numerics.Vector2 GetMousePos() => ImGui.GetMousePos();
+        public static Vector2 GetMousePos() => ImGui.GetMousePos();
         public static Vector2 GetClientSize() => new Vector2(Window.instance.ClientSize.X, Window.instance.ClientSize.Y);
-        public static System.Numerics.Vector2 GetContentRegionAvail() => ImGui.GetContentRegionAvail();
+        public static Vector2 GetContentRegionAvail() => ImGui.GetContentRegionAvail();
 
         // Set
 
         public static void SetNextWindowPos(Vector2 position, Condition condition) =>
-            ImGui.SetNextWindowPos(new System.Numerics.Vector2(position.X, position.Y), (ImGuiCond)condition);
-        public static void SetWindowPos(Vector2 position) => ImGui.SetWindowPos(new System.Numerics.Vector2(position.X, position.Y));
-        public static void SetWindowSize(Vector2 size) => ImGui.SetWindowSize(new System.Numerics.Vector2(size.X, size.Y));
+            ImGui.SetNextWindowPos(new Vector2(position.X, position.Y), (ImGuiCond)condition);
+        public static void SetWindowPos(Vector2 position) => ImGui.SetWindowPos(new Vector2(position.X, position.Y));
+        public static void SetWindowSize(Vector2 size) => ImGui.SetWindowSize(new Vector2(size.X, size.Y));
         public void SetDockSpace() =>
-            ImGui.DockSpace(ImGui.GetID(windowName), System.Numerics.Vector2.Zero, ImGuiDockNodeFlags.None);
+            ImGui.DockSpace(ImGui.GetID(windowName), Vector2.Zero(), ImGuiDockNodeFlags.None);
         
         // open
 
@@ -289,7 +289,7 @@ namespace Relic.Editor
         // child begin/end
 
         public static void BeginChild(string label) => ImGui.BeginChild(label);
-        public static void BeginChild(string label, System.Numerics.Vector2 size, bool border = false, ImGuiWindowFlags flags = ImGuiWindowFlags.None) => 
+        public static void BeginChild(string label, Vector2 size, bool border = false, ImGuiWindowFlags flags = ImGuiWindowFlags.None) => 
             ImGui.BeginChild(label, size, border, flags);
 
         public static void EndChild() => ImGui.EndChild();
