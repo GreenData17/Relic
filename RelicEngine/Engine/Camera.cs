@@ -14,7 +14,7 @@ namespace Relic.Engine
 
         public override void GraphicsUpdate()
         {
-            if(_oldPosition == null) return;
+            if(_oldPosition == null || !mainCamera) return;
             if(_oldPosition.X == gameObject.transform.position.X && _oldPosition.Y == gameObject.transform.position.Y) return;
 
             var camPos = Window.mainCam.position;
@@ -42,6 +42,7 @@ namespace Relic.Engine
                 oldCam = null;
                 Window.instance.currentScene.mainCamera = this.gameObject;
                 mainCamera = true;
+                
                 RefreshPosition();
             }
         }
