@@ -96,7 +96,7 @@ namespace Relic.Engine
 
             // TODO Temp
             currentScene = new Scene();
-            currentScene.loadGameobject();
+            currentScene.LoadGameobjects();
         }
 
         //====================

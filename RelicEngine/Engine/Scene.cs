@@ -20,10 +20,10 @@ namespace Relic.Engine
 
         [JsonIgnore]
         public List<GameObject> gameObjects = new List<GameObject>();
-        [JsonIgnore]
-        public Dictionary<string, Dictionary<string, object>> variableData = new Dictionary<string, Dictionary<string, object>>();
+        
+        private List<gameObjectData> gameObjectsDataCollection = new List<gameObjectData>();
 
-        //            Gameobject name   comonement name    variable name   \/----variable data
+
         public Dictionary<string, Dictionary<string, Dictionary<string, object>>> gameobjectData = new Dictionary<string, Dictionary<string, Dictionary<string, object>>>();
 
         public Scene() => setup();
@@ -113,6 +113,55 @@ namespace Relic.Engine
         public static List<Type> GetAllSubclassesOf(Type baseType)
         {
             return Assembly.GetAssembly(baseType).GetTypes().Where(type => type.IsSubclassOf(baseType)).ToList();
+        }
+
+
+        public void SaveGameobjects()
+        {
+            foreach (var gameObject in gameObjects)
+            {
+                var data = new gameObjectData();
+                data.enabled = gameObject.enabled;
+                data.name = gameObject.name;
+                data.tag = gameObject.tag;
+
+                var componenets = new Dictionary<string, Dictionary<string, object>>();
+
+                foreach (var component in gameObject.components)
+                {
+                    var scriptFields = new Dictionary<string, object>();
+                    foreach (var fieldInfo in component.GetType().GetFields())
+                    {
+                        scriptFields.Add(fieldInfo.Name, fieldInfo.GetValue(component));
+                    }
+                    componenets.Add(component.name, scriptFields);
+                }
+
+                data.componentData = componenets;
+                gameObjectsDataCollection.Add(data);
+            }
+
+            SaveManager.WriteJsonFile<List<gameObjectData>>(gameObjectsDataCollection, "Assets\\Scenes", "test2.scene");
+            gameObjectsDataCollection = null;
+        }
+
+        public void LoadGameobjects()
+        {
+            gameObjectsDataCollection = SaveManager.ReadJsonFile<List<gameObjectData>>("Assets\\Scenes\\test2.scene") as List<gameObjectData>;
+
+            foreach (var gameObjectData in gameObjectsDataCollection)
+            {
+                
+            }
+        }
+
+        public class gameObjectData
+        {
+            public bool enabled;
+            public string name;
+            public int tag;
+
+            public Dictionary<string, Dictionary<string, object>> componentData =  new Dictionary<string, Dictionary<string, object>>();
         }
     }
 }
