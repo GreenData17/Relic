@@ -118,6 +118,8 @@ namespace Relic.Engine
 
         public void SaveGameobjects()
         {
+            gameObjectsDataCollection = new List<gameObjectData>();
+
             foreach (var gameObject in gameObjects)
             {
                 var data = new gameObjectData();
@@ -154,7 +156,7 @@ namespace Relic.Engine
 
             foreach (var gameObject in gameObjectsDataCollection)
             {
-                var obj = new GameObject();
+                var obj = new GameObject(true);
                 obj.enabled = gameObject.enabled;
                 obj.name = gameObject.name;
                 obj.tag = gameObject.tag;
@@ -178,6 +180,12 @@ namespace Relic.Engine
                         catch {}
 
 
+                    }
+
+                    if (type == typeof(Transform))
+                    {
+                        obj.LoadTransform(script as Transform);
+                        continue;
                     }
 
                     obj.AddComponent(script as MonoBehaviour);
