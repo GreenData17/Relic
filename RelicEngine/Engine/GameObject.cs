@@ -17,12 +17,14 @@ namespace Relic.Engine
         [JsonIgnore]
         public List<MonoBehaviour> components;
 
-        public GameObject()
+        public GameObject(bool loading = false)
         {
             name = "New GameObject";
             tag = 0;
-            transform = new Transform();
             components = new List<MonoBehaviour>();
+
+            if(!loading)
+                transform = AddComponent(new Transform()) as Transform;
         }
 
         public void Update()
@@ -58,18 +60,33 @@ namespace Relic.Engine
             return null;
         }
 
-        public void AddComponent(MonoBehaviour component)
+        public MonoBehaviour AddComponent(MonoBehaviour component)
         {
             components.Add(component);
             component.SetParent(this);
             component.Start();
             component.Load();
             component._finishedInit = true;
+            return component;
         }
 
         public void RemoveComponent(MonoBehaviour component)
         {
             components.Remove(component);
+        }
+
+        public void LoadTransform(Transform newTransform)
+        {
+            foreach (var component in components)
+            {
+                if (component as Transform == transform)
+                {
+                    RemoveComponent(component);
+                }
+
+            }
+            
+            transform = AddComponent(newTransform) as Transform;
         }
     }
 }

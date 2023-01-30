@@ -2,7 +2,7 @@
 
 namespace Relic.Engine
 {
-    public class Transform
+    public class Transform : MonoBehaviour
     {
         public Vector2 position
         {
@@ -11,6 +11,7 @@ namespace Relic.Engine
         }
         private Vector2 _position;
 
+        public float X, Y;
         public float rotation;
 
         // Events
@@ -25,6 +26,16 @@ namespace Relic.Engine
         {
             position = new Vector2(0);
             rotation = 0f;
+        }
+
+        public override void Start()
+        {
+            position.X = X; position.Y = Y;
+        }
+
+        public override void Update()
+        {
+            X = position.X; Y = position.Y;
         }
     }
 }
