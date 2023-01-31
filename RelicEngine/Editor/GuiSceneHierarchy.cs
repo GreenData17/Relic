@@ -21,6 +21,7 @@ namespace Relic.Editor
             Begin("Scene", ImGuiWindowFlags.MenuBar);
             DetectHovering();
 
+            // TODO: set scene name by filename
             Label(Window.instance.currentScene == null ? "No Scene Open" : Window.instance.currentScene.name);
             Separator();
 
