@@ -96,7 +96,7 @@ namespace Relic.Engine
 
             // TODO Temp
             currentScene = new Scene();
-            currentScene.LoadGameobjects();
+            // currentScene.LoadGameobjects();
         }
 
         //====================
@@ -358,8 +358,10 @@ namespace Relic.Engine
 
         public void SaveCurrentScene()
         {
+            if(SaveManager.DirectoryExists("Assets\\Scenes")) return;
+
             SaveManager.CreateDirectory(@"Assets\Scenes");
-            SaveManager.WriteJsonFile<Scene>(currentScene, @"Assets\Scenes", $"{currentScene.name}.scene");
+            SaveManager.WriteJsonFile<Scene>(new Scene(), @"Assets\Scenes", $"New Scene.scene");
         }
     }
 }

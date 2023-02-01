@@ -272,8 +272,7 @@ namespace Relic.Editor
 
                     if (info.Extension == ".scene")
                     {
-                        Scene scene = (Scene)SaveManager.ReadJsonFile<Scene>("Assets\\Scenes\\" + info.Name);
-                        Window.instance.currentScene = scene;
+                        Window.instance.currentScene.LoadGameobjects("Assets\\Scenes\\"+info.Name);
                     }
                 }
             }

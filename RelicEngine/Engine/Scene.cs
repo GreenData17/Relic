@@ -143,15 +143,17 @@ namespace Relic.Engine
                 gameObjectsDataCollection.Add(data);
             }
 
-            SaveManager.WriteJsonFile<List<gameObjectData>>(gameObjectsDataCollection, "Assets\\Scenes", "test2.scene");
+            SaveManager.WriteJsonFile<List<gameObjectData>>(gameObjectsDataCollection, "Assets\\Scenes", name + ".scene");
             gameObjectsDataCollection = null;
         }
 
-        public void LoadGameobjects()
+        public void LoadGameobjects(string path)
         {
-            gameObjectsDataCollection = SaveManager.ReadJsonFile<List<gameObjectData>>("Assets\\Scenes\\test2.scene") as List<gameObjectData>;
+            FileInfo info = new FileInfo(SaveManager.GetFullPath(path));
+            gameObjectsDataCollection = SaveManager.ReadJsonFile<List<gameObjectData>>(path) as List<gameObjectData>;
 
-            if(gameObjectsDataCollection == null ) return;
+            if(gameObjectsDataCollection == null || info == null) return;
+            name = info.Name.Remove(info.Name.Length-6, 6);
             gameObjects.Clear();
 
             foreach (var gameObject in gameObjectsDataCollection)
