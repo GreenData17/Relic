@@ -94,12 +94,16 @@ namespace Relic.Engine
             Directory.CreateDirectory(GetProjectPath() + path);
         }
 
+        public static bool DirectoryExists(string path)
+        {
+            if (Directory.Exists(GetProjectPath() + path)) return true;
+            return false;
+        }
+
         // [INDEX] Get Functions
 
-        private static string GetProjectPath()
-        {
-            return Program.projectFolder + @"\";
-        }
+        public static string GetFullPath(string path) => Program.projectFolder + @"\" + path;
+        public static string GetProjectPath() => Program.projectFolder + @"\";
 
         // Not useful for the Editor...
         [Obsolete]
