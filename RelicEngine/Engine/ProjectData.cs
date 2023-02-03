@@ -10,7 +10,21 @@ namespace Relic.Engine
     // TODO: save and load Data
     public class ProjectData
     {
+        // TODO: Set name on project creation.
+        public string projectName = "New Project";
         // TODO: OnStart open this scene!
-        public string LastOpenScene = "Assets\\Scenes\\New Scene.scene";
+        public string lastOpenScene = "Assets\\Scenes\\New Scene.scene";
+
+
+
+        public ProjectData LoadProjectData()
+        {
+            return SaveManager.ReadJsonFile<ProjectData>("") as ProjectData;
+        }
+
+        public void SaveProjectData()
+        {
+            SaveManager.WriteJsonFile<ProjectData>(this, "", $"{projectName}.project");
+        }
     }
 }
