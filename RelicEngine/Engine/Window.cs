@@ -334,8 +334,8 @@ namespace Relic.Engine
 
 
         // [INDEX] Unloading
-
-        public void Quit() => Close();
+        
+        public static void Quit() => instance.Close();
 
         protected override void OnUnload()
         {
