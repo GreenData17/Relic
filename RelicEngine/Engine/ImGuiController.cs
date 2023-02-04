@@ -473,7 +473,7 @@ void main()
                     {
                         // throw new NotImplementedException();
                         Debug.LogError("Error in RenderImDrawData! ImGuiController Line 472.");
-                        Window.instance.Quit();
+                        Window.Quit();
                     }
                     else
                     {
