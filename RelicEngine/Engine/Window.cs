@@ -35,6 +35,7 @@ namespace Relic.Engine
         // Editor Specific Variables
         public static OrthographicCamera mainCam;
         public static Setting setting;
+        public static ProjectData projectData;
         public static string currentHoveredWindow;
         public static int loadedTextures;
         public static int loadedGameobjects;
@@ -96,7 +97,7 @@ namespace Relic.Engine
 
             // TODO Temp
             currentScene = new Scene();
-            // currentScene.LoadGameobjects();
+            projectData = ProjectData.Initialize();
         }
 
         //====================
@@ -232,7 +233,7 @@ namespace Relic.Engine
         }
 
         
-        private bool imGuiMenu = false;
+        private bool _imGuiMenu = false;
 
         private void ImGuiUpdates()
         {
@@ -248,7 +249,7 @@ namespace Relic.Engine
 
             if(debugMenuIsOpen) debugMenu.OnGui();
             if(settingIsOpen) guiSettings.OnGui();
-            if(imGuiMenu) ImGui.ShowDemoWindow();
+            if(_imGuiMenu) ImGui.ShowDemoWindow();
 
             if (ImGui.BeginMainMenuBar())
             {
@@ -270,7 +271,7 @@ namespace Relic.Engine
                 if (ImGui.BeginMenu("Help"))
                 {
                     if (ImGui.MenuItem("Debug Menu")) debugMenuIsOpen = !debugMenuIsOpen;
-                    if (ImGui.MenuItem("Imgui Menu")) imGuiMenu = !imGuiMenu;
+                    if (ImGui.MenuItem("Imgui Menu")) _imGuiMenu = !_imGuiMenu;
 
                     ImGui.EndMenu();
                 }
@@ -338,6 +339,7 @@ namespace Relic.Engine
 
         protected override void OnUnload()
         {
+            projectData.SaveProjectData();
             SaveCurrentScene();
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);

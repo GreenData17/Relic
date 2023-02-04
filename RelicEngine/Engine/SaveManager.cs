@@ -100,10 +100,22 @@ namespace Relic.Engine
             return false;
         }
 
+        public static bool FileExists(string path)
+        {
+            if (File.Exists(GetProjectPath() + path)) return true;
+            return false;
+        }
+
+        public static string[] GetFiles(string path)
+        {
+            return Directory.GetFiles(GetProjectPath() + path);
+        }
+
         // [INDEX] Get Functions
 
         public static string GetFullPath(string path) => Program.projectFolder + @"\" + path;
         public static string GetProjectPath() => Program.projectFolder + @"\";
+        public static string GetEnginePath(string path) => path.Remove(0, Program.projectFolder.Length + 1);
 
         // Not useful for the Editor...
         [Obsolete]
