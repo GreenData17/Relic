@@ -15,11 +15,28 @@ namespace Relic.Engine
         // TODO: OnStart open this scene!
         public string lastOpenScene = "Assets\\Scenes\\New Scene.scene";
 
-
-
-        public ProjectData LoadProjectData()
+        public ProjectData()
         {
-            return SaveManager.ReadJsonFile<ProjectData>("") as ProjectData;
+            Window.instance.Title = "Relic - " + projectName;
+            Window.instance.currentScene.LoadGameobjects(lastOpenScene);
+        }
+
+        public static ProjectData Initialize()
+        {
+            foreach (var file in SaveManager.GetFiles(""))
+            {
+                if (file.EndsWith(".project"))
+                {
+                    return LoadProjectData(SaveManager.GetEnginePath(file));
+                }
+            }
+
+            return new ProjectData();
+        }
+
+        public static ProjectData LoadProjectData(string fileName = "New Project")
+        {
+            return SaveManager.ReadJsonFile<ProjectData>("" + fileName) as ProjectData;
         }
 
         public void SaveProjectData()
