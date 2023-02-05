@@ -143,6 +143,11 @@ namespace Relic.Engine
                 gameObjectsDataCollection.Add(data);
             }
 
+            if(!SaveManager.DirectoryExists("Assets"))
+                SaveManager.CreateDirectory("Assets");
+            if(SaveManager.DirectoryExists("Assets\\Scenes"))
+                SaveManager.CreateDirectory("Assets\\Scenes");
+
             SaveManager.WriteJsonFile<List<gameObjectData>>(gameObjectsDataCollection, "Assets\\Scenes", name + ".scene");
             gameObjectsDataCollection = null;
         }
