@@ -273,6 +273,7 @@ namespace Relic.Editor
                     if (info.Extension == ".scene")
                     {
                         Window.instance.currentScene.LoadGameobjects("Assets\\Scenes\\"+info.Name);
+                        Window.projectData.lastOpenScene = currentFolder + "\\" + info.Name;
                     }
                 }
             }
