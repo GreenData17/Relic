@@ -65,7 +65,7 @@ namespace RelicHub
             Directory.CreateDirectory(PathText.Text + @"\Builds");
             Directory.CreateDirectory(PathText.Text + @"\Settings");
             Directory.CreateDirectory(PathText.Text + @"\temp");
-            File.Create(PathText.Text + $@"\{NameText.Text}.project");
+            File.WriteAllText(PathText.Text + $@"\{NameText.Text}.project", "{}");
 
             mainWin.Enabled = true;
             projectItem.OpenProject(PathText.Text, NameText.Text);

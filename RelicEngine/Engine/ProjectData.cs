@@ -11,7 +11,7 @@ namespace Relic.Engine
     {
         // TODO: Set name on project creation.
         public string projectName = "";
-        public string lastOpenScene = "Assets\\Scenes\\New Scene.scene";
+        public string lastOpenScene = "\\Assets\\Scenes\\New Scene.scene";
 
         public ProjectData()
         {
