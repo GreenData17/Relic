@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Relic.Engine
 {
-
-    // TODO: save and load Data
     public class ProjectData
     {
         // TODO: Set name on project creation.
-        public string projectName = "New Project";
-        // TODO: OnStart open this scene!
+        public string projectName = "";
         public string lastOpenScene = "Assets\\Scenes\\New Scene.scene";
 
         public ProjectData()
         {
+            if (projectName == "")
+                projectName = new DirectoryInfo(SaveManager.GetProjectPath()).Name;
+
             Window.instance.Title = "Relic - " + projectName;
             Window.instance.currentScene.LoadGameobjects(lastOpenScene);
         }
