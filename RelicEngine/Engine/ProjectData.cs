@@ -17,7 +17,7 @@ namespace Relic.Engine
             if (projectName == "")
                 projectName = new DirectoryInfo(SaveManager.GetProjectPath()).Name;
 
-            Window.instance.Title = "Relic - " + projectName;
+            Window.instance.Title = "Relic | " + projectName;
             Window.instance.currentScene.LoadGameobjects(lastOpenScene);
         }
 
