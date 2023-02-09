@@ -3,7 +3,7 @@ Relic is a hobby project. An attemp to create a Game Engine using OpenTK for the
 It's scripts are heavily inspired by Unity3d and has similar methods.
 
 ### Current Features
-* Its planed usecase is for 2D game development.
+* 2D game development environment.
 * createing Gameobjects and adding Components
 * It has an Engine Console and an External development Console.
 
